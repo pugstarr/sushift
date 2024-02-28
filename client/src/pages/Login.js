@@ -15,7 +15,7 @@ function Login() {
     const handleGoogleLoginSuccess = async (credentialResponse) => {
         try {
             const token = credentialResponse.credential;
-            const backendResponse = await axios.post('https://localhost:8000/users/google-login', {
+            const backendResponse = await axios.post('http://localhost:8000/users/google-login', {
                 token,
             });
 
@@ -38,43 +38,38 @@ function Login() {
 
     return (
         <div className="flex min-h-screen w-full">
-            {/* Sign-in Panel */}
-            <div className="w-1/3 bg-white flex flex-col justify-center p-8">
-                <div className="max-w-sm m-auto">
+            {/* Sign-in Panel with centered content */}
+            <div className="w-1/3 bg-gray-900 flex flex-col justify-center items-center p-8 text-white">
+                <div className="text-center">
                     <h3 className="text-4xl font-bold mb-6">Welcome to MERN</h3>
-                    <div className="bg-gray-100 p-6 rounded-lg shadow-lg">
-                        <h4 className="text-2xl font-semibold mb-4">Login</h4>
-                        <div className="flex justify-center"> {/* Centering the login button */}
-                            <GoogleLogin
-                                clientId={clientId}
-                                render={(renderProps) => (
-                                    <div className="flex justify-center"> {/* Added for extra centering */}
-                                        <GoogleButton
-                                            onClick={renderProps.onClick}
-                                            disabled={renderProps.disabled}
-                                            className="transition ease-in duration-200"
-                                        />
-                                    </div>
-                                )}
-                                onSuccess={handleGoogleLoginSuccess}
-                                onFailure={handleGoogleLoginFailure}
-                                cookiePolicy={'single_host_origin'}
-                            />
-                        </div>
+                    <div className="flex justify-center w-full">
+                        <GoogleLogin
+                            clientId={clientId}
+                            render={(renderProps) => (
+                                <GoogleButton
+                                    onClick={renderProps.onClick}
+                                    disabled={renderProps.disabled}
+                                    className="transition ease-in duration-200"
+                                />
+                            )}
+                            onSuccess={handleGoogleLoginSuccess}
+                            onFailure={handleGoogleLoginFailure}
+                            cookiePolicy={'single_host_origin'}
+                        />
                     </div>
                     <button
                         onClick={() => navigate('/about')}
-                        className="mt-4 text-sm text-gray-600 hover:text-gray-800 transition duration-200 ease-in-out block mx-auto"
+                        className="mt-4 text-sm text-green-400 hover:text-green-300 transition duration-200 ease-in-out"
                     >
-                        Learn more about Berbai
+                        Learn more about Sushift
                     </button>
                 </div>
             </div>
 
             {/* Cascading Style Panel */}
-            <div className="w-2/3 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center p-8 text-white">
+            <div className="w-2/3 bg-gradient-to-br from-black to-green-900 flex items-center justify-center p-8 text-white">
                 <h1 className="text-5xl font-bold max-w-lg text-center">
-                    Simplify your scheduling
+                    Simplify your scheduling.
                 </h1>
             </div>
         </div>
