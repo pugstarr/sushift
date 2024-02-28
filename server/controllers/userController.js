@@ -1,65 +1,41 @@
 // userController.js
 const User = require('../models/User');
 const logger = require('../logger'); 
-const { OAuth2Client } = require('google-auth-library');
+const bcrypt = require('bcrypt');
+const User = require('./User'); 
 
-exports.addUser = async (req, res) => {
-    try {
-        const { username, password } = req.body;
+// User Registration
+const registerUser = async (req, res) => {
+  const { email, password, Fname, Lname, role } = req.body;
+  try {
+    let user = await User.findOne({ email });
+    if (user) return res.status(400).json({ msg: 'User already exists' });
 
-        // Check for existing user
-        const existingUser = await User.findOne({ username });
-        if (existingUser) {
-            logger.info('Attempt to create a user with an existing username: %s', username);
-            return res.status(409).json({ message: "Username already exists" });
-        }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
 
-        // Create a new user instance and save
-        const newUser = new User({ username, password });
-        if (!username || !password) {
-            return res.status(400).json({ message: "Username and password are required" });
-        }
-
-        await newUser.save();
-
-        logger.info('New user created: %s', username);
-        res.status(201).json({
-            message: "User added successfully",
-            user: { id: newUser._id, username: newUser.username }
-        });
-    } catch (error) {
-        logger.error('Error adding user: %s', error.message);
-        res.status(500).json({ message: "Error adding user", error: error.message });
-    }
+    user = new User({ email, password: hashedPassword, Fname, Lname, role });
+    await user.save();
+    res.status(201).json({ msg: 'User registered successfully' });
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error' });
+  }
 };
 
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+// User Login
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    let user = await User.findOne({ email });
+    if (!user) return res.status(400).json({ msg: 'Invalid Credentials' });
 
-exports.googleLogin = async (req, res) => {
-    try {
-        const { token } = req.body;
-        const ticket = await client.verifyIdToken({
-            idToken: token,
-            audience: process.env.GOOGLE_CLIENT_ID,
-        });
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(400).json({ msg: 'Invalid Credentials' });
 
-        const { name, email, picture } = ticket.getPayload();
-
-        // Check if user already exists
-        let user = await User.findOne({ email });
-        if (!user) {
-            // If user does not exist, create a new user
-            user = new User({ username: name, email, picture });
-            await user.save();
-        }
-
-        // Return user info (omit sensitive data)
-        res.status(200).json({
-            message: "User authenticated successfully",
-            user: { id: user._id, username: user.username, email: user.email, picture: user.picture }
-        });
-    } catch (error) {
-        logger.error('Error in Google Authentication: %s', error.message);
-        res.status(500).json({ message: "Error in Google Authentication", error: error.message });
-    }
+    res.json({ msg: 'User logged in successfully' }); // Implement JWT or session management here
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error' });
+  }
 };
+
+module.exports = { registerUser, loginUser };

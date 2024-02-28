@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require('../models/User');
 const userController = require('../controllers/userController');
 
-// route to create a new user
-router.post('/google-login', userController.googleLogin);
+router.post('/register', userController.registerUser);
+router.post('/login', userController.loginUser);
 
 module.exports = router;

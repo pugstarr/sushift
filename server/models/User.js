@@ -12,6 +12,21 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: false
+    },
+    Fname: {
+        type: String,
+        required: true,
+        unique: false
+    },
+    Lname: {
+        type: String,
+        required: true,
+        unique: false
+    },
+    role: {
+        type: String,
+        required: false,
+        unique: false
     }
 });
 
