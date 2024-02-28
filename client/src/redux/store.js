@@ -6,17 +6,23 @@ import userReducer from './slices/userSlice';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['user'], // Persist the user slice including dark mode preference
+  whitelist: ['user'],
 };
 
 const rootReducer = combineReducers({
-  user: userReducer, // Only user reducer is now needed
+  user: userReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ['persist/PERSIST'],
+      },
+    }),
 });
 
 export const persistor = persistStore(store);
