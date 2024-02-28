@@ -19,7 +19,7 @@ To get Sushift up and running on your local machine, follow the steps below. The
    git clone https://github.com/sm467d/sushift.git
    ```
 
-2. **Create Environment File**
+2. **Create Environment Files**
 
    After cloning the repo, you need to set up the environment variables. Create 2 `.env` files in the root directories of both the client and server, and replace the necessary values:
 
