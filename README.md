@@ -1,5 +1,5 @@
 # Sushift
-Lightweight restaurant scheduling software, tailored for Akira Ramen &amp;  Izakaya
+Lightweight restaurant scheduling software, tailored for Akira Ramen &amp;  Izakaya.
 
 ## How to Run
 
