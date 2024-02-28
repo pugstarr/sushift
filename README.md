@@ -27,6 +27,7 @@ To get Sushift up and running on your local machine, follow the steps below. The
    ```plaintext
    # .env
    REACT_APP_GOOGLE_CLIENT_ID="YOUR_GOOGLE_CLIENT_ID"
+   ```
 
    For the server environment, you will need to set the following variables:
    ```plaintext
