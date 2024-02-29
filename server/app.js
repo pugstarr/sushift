@@ -24,6 +24,7 @@ const certificatePath = process.env.CERTIFICATE_PATH;
 const privateKey = fs.readFileSync(privateKeyPath, 'utf8');
 const certificate = fs.readFileSync(certificatePath, 'utf8');
 
+
 const credentials = { key: privateKey, cert: certificate };
 
 // MongoDB connection using Mongoose

@@ -1,8 +1,7 @@
 // userController.js
 const User = require('../models/User');
-const logger = require('../logger'); 
+//const logger = require('../logger'); idk what this is used for
 const bcrypt = require('bcrypt');
-const User = require('./User'); 
 
 // User Registration
 const registerUser = async (req, res) => {
@@ -26,16 +25,19 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
+
     let user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ msg: 'Invalid Credentials' });
-
+    console.log(password);
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ msg: 'Invalid Credentials' });
+    if (!isMatch || !user) {
+        return res.status(400).json({ msg: 'Invalid Credentials' });
+    }
 
-    res.json({ msg: 'User logged in successfully' }); // Implement JWT or session management here
+    res.json({ msg: 'User logged in successfully' });
   } catch (err) {
     res.status(500).json({ msg: 'Server error' });
   }
 };
+
 
 module.exports = { registerUser, loginUser };
