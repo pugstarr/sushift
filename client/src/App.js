@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
+import Home from './pages/Home';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { gapi } from 'gapi-script';
 
@@ -24,6 +25,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Login />} />
                     <Route path="/login" element={<Login />} />
+                    <Route path="/home" element={<Home />} />
                 </Routes>
             </Router>
         </GoogleOAuthProvider>
