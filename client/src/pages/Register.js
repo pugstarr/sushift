@@ -15,10 +15,9 @@ function Register() {
             const response = await axios.post('https://localhost:8000/users/register', {
                 email,
                 password,
-                firstName,
-                lastName
-                
-            });
+                Fname: firstName, 
+                Lname: lastName,  
+                });
             console.log('Registration successful', response.data);
             navigate('/login'); 
         } catch (error) {
