@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
+import '../index';
 
 function Login() {
     const navigate = useNavigate();
@@ -11,19 +11,21 @@ function Login() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8000/users/login', { email, password });
+            const response = await axios.post('https://localhost:8000/users/login', { email, password });
             console.log('Login successful', response.data);
             // Here you should handle login success, e.g., storing the returned token and redirecting the user
             navigate('/home');
         } catch (error) {
-            console.error('Login error:', error.response.data);
+            console.error('Login error:', error.response ? error.response.data : error.message);
+            
         }
     };
 
     const redirectToRegister = () => {
-        navigate('/register');
+        navigate('/reg');
     };
 
+    
     return (
         <div className="flex min-h-screen w-full">
             {/* Login Form */}

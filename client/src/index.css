@@ -1,3 +1,58 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* css/Login.css */
+.container {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+}
+
+.loginFormContainer {
+    width: 40%; /* Adjust based on preference */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center items horizontally */
+    padding: 20px;
+}
+
+.textInput {
+    width: 300px; /* Adjust width as needed */
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+.loginButton {
+    width: 300px; /* Match input width */
+    padding: 10px;
+    margin-top: 10px; /* Space above the button */
+    background-color: #007bff; /* Bootstrap primary button color */
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.rightSideText {
+    width: 60%; /* Adjust based on preference */
+    display: flex;
+    align-items: center; /* Center items vertically */
+    justify-content: center; /* Center items horizontally */
+    padding: 20px;
+    background: linear-gradient(to bottom right, #000, #004d40); /* Adjust colors as needed */
+    color: white;
+    text-align: center; /* Ensure text is centered */
+}
+
+h1, h3 {
+    font-weight: bold; /* Ensure text is bold */
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    .loginFormContainer, .rightSideText {
+        width: 80%; /* Full width on smaller screens */
+    }
+}

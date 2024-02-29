@@ -1,32 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
-import { GoogleOAuthProvider } from '@react-oauth/google';
-import { gapi } from 'gapi-script';
-
-const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+import Register from './pages/Reg';
 
 function App() {
-    useEffect(() => {
-        function start() {
-            gapi.auth2.init({
-                clientId: clientId,
-                scope: ""
-            });
-        }
-
-        gapi.load('client:auth2', start);
-    }, []);
-
     return (
-        <GoogleOAuthProvider clientId={clientId}>
-            <Router>
-                <Routes>
-                    <Route path="/" element={<Login />} />
-                    <Route path="/login" element={<Login />} />
-                </Routes>
-            </Router>
-        </GoogleOAuthProvider>
+        <Router>
+            <Routes>
+                <Route path="/" element={<Login />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/reg" element={<Register />} /> // Added Register route
+            </Routes>
+        </Router>
     );
 }
 

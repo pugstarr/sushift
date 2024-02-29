@@ -2,37 +2,52 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-
-function Login() {
+function Register() {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
 
-    const handleLogin = async (e) => {
+    const handleRegister = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8000/users/login', { email, password });
-            console.log('Login successful', response.data);
-            // Here you should handle login success, e.g., storing the returned token and redirecting the user
-            navigate('/home');
+            const response = await axios.post('https://localhost:8000/users/register', {
+                email,
+                password,
+                Fname: firstName,
+                Lname: lastName
+                
+            });
+            console.log('Registration successful', response.data);
+            navigate('/login'); 
         } catch (error) {
-            console.error('Login error:', error.response.data);
+            console.error('Registration error:', error.response.data);
         }
-    };
-
-    const redirectToRegister = () => {
-        navigate('/register');
     };
 
     return (
         <div className="flex min-h-screen w-full">
-            {/* Login Form */}
+            {/* Registration Form */}
             <div className="w-1/2 flex flex-col justify-center items-center p-8">
-                <h3 className="text-3xl font-bold mb-6">Log In</h3>
-                <form onSubmit={handleLogin} className="w-full max-w-xs">
+                <h3 className="text-3xl font-bold mb-6">Create Account</h3>
+                <form onSubmit={handleRegister} className="w-full max-w-xs">
+                    <input
+                        type="text"
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        placeholder="First Name"
+                        className="mb-4 p-2 w-full"
+                    />
+                    <input
+                        type="text"
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        placeholder="Last Name"
+                        className="mb-4 p-2 w-full"
+                    />
                     <input
                         type="email"
-                        name="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="Email"
@@ -40,25 +55,21 @@ function Login() {
                     />
                     <input
                         type="password"
-                        name="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="Password"
                         className="mb-4 p-2 w-full"
                     />
-                    <button type="submit" className="p-2 bg-blue-500 w-full text-white">Log In</button>
+                    <button type="submit" className="p-2 bg-blue-500 w-full text-white">Register</button>
                 </form>
-                <button onClick={redirectToRegister} className="mt-4 underline">
-                    Don't have an account? Register here.
-                </button>
             </div>
 
             {/* Right Side Content */}
             <div className="w-1/2 bg-gradient-to-br from-black to-green-900 flex items-center justify-center p-8 text-white">
-                <h1 className="text-5xl font-bold max-w-lg text-center">Simplify your scheduling.</h1>
+                <h1 className="text-5xl font-bold max-w-lg text-center">Welcome to Sushift!</h1>
             </div>
         </div>
     );
 }
 
-export default Login;
+export default Register;
