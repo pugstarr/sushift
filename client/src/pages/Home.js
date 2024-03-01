@@ -13,7 +13,7 @@ const Home = () => {
 
   // Fetch organizations from the backend when the component mounts
   useEffect(() => {
-    const fetchOrganizations = async () => {
+   const fetchOrganizations = async () => {
       try {
         const response = await axios.get('https://localhost:8000/orgs/get');
         setOrganizations(response.data); // Adjust according to your backend response structure
@@ -39,18 +39,6 @@ const Home = () => {
     // Additional logic when an organization is selected
   };
 
-  // Function to handle creating a new organization
-  const handleCreateOrganization = async (newOrgName) => {
-    try {
-      const response = await axios.post('https://localhost:8000/orgs/create', { name: newOrgName });
-      setOrganizations(prev => [...prev, response.data.organization]); // Assuming the backend sends back the created organization
-      setDialogOpen(false); // Close the dialog after creation
-    } catch (error) {
-      console.error('Failed to create organization:', error);
-      // Handle error, such as showing an error message to the user
-    }
-  };
-
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-gray-900 to-green-800 text-white relative">
       <Sidebar />
@@ -67,7 +55,8 @@ const Home = () => {
           onAddOrJoinOrganization={handleAddOrJoinOrganization}
         />
         {/* Pass handleCreateOrganization to NewOrganizationDialog */}
-        {dialogOpen && <NewOrganizationDialog onClose={handleCloseDialog} onCreate={handleCreateOrganization} />}
+        {dialogOpen && <NewOrganizationDialog onClose={handleCloseDialog}  />
+}
       </div>
     </div>
   );

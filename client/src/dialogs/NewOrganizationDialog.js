@@ -13,8 +13,7 @@ const NewOrganizationDialog = ({ onClose, onCreate }) => {
     event.preventDefault(); // Prevent default form submission behavior
     try {
         const response = await axios.post('https://localhost:8000/orgs/create', { name: orgName });
-        onCreate(response.data.organization);
-        console.log(orgName);
+        //onCreate(response.data.organization);
         onClose(); // Close the dialog
     } catch (error) {
         console.error('Failed to create organization:', error);
