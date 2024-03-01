@@ -1,4 +1,3 @@
-// OrganizationDropdown.js
 import React, { useState, useRef, useEffect } from 'react';
 import { CaretUp, Plus } from 'phosphor-react';
 
@@ -24,7 +23,7 @@ const OrganizationDropdown = ({ organizations, onOrganizationSelected, onAddOrJo
         className="cursor-pointer bg-transparent py-2 flex items-center justify-between"
       >
         <h1 className="text-4xl font-bold">{placeholderText}</h1>
-        <CaretUp size={20} weight="bold" className={`text-gray-400 transition-transform ${isOpen ? 'transform rotate-180' : ''}`} />
+        <CaretUp size={20} weight="bold" className="text-gray-400 rotate-180" />
       </div>
       {isOpen && (
         <div className="absolute right-0 mt-2" style={{width: `${buttonWidth}px`}}>
