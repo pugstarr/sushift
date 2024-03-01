@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { login } from '../redux/slices/userSlice'; // Adjust this import path to where your userSlice is located
 
 function Login() {
     const navigate = useNavigate();
+    const dispatch = useDispatch(); // Hook to dispatch actions
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -12,6 +15,14 @@ function Login() {
         try {
             const response = await axios.post('https://localhost:8000/users/login', { email, password });
             console.log('Login successful', response.data);
+
+            // Assuming response.data returns an object with user details. Adjust according to your actual API response
+            // Destructure with alias if necessary to avoid "Cannot access 'email' before initialization" error
+            const { id, username, email: userEmail, Fname, Lname, role } = response.data.user; // Adjust based on actual response structure
+
+            // Dispatch the login action with the relevant payload, including all necessary user details
+            dispatch(login({ id, username, email: userEmail, Fname, Lname, role }));
+
             navigate('/home');
         } catch (error) {
             console.error('Login error:', error.response ? error.response.data : error.message);

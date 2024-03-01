@@ -25,19 +25,33 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
-
     let user = await User.findOne({ email });
-    console.log(password);
+    if (!user) return res.status(400).json({ msg: 'Invalid Credentials' });
+
+    // Check if the password matches
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch || !user) {
+    if (!isMatch) {
         return res.status(400).json({ msg: 'Invalid Credentials' });
     }
 
-    res.json({ msg: 'User logged in successfully' });
+    // Assuming you want to return the user ID and possibly other information
+    res.json({
+      msg: 'User logged in successfully',
+      user: {
+        id: user._id, // Include the user's ID
+        email: user.email,
+        Fname: user.Fname,
+        Lname: user.Lname,
+        role: user.role
+        // Add any other user info you want to return here
+      }
+    });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ msg: 'Server error' });
   }
 };
+
 
 
 module.exports = { registerUser, loginUser };

@@ -6,22 +6,34 @@ export const userSlice = createSlice({
     isAuthenticated: false,
     id: null,
     username: null,
-    // add other initial state fields here
+    email: null, // Add email to your state if needed
+    Fname: null,
+    Lname: null,
+    role: null,
   },
   reducers: {
     login: (state, action) => {
+      const { id, username, email, Fname, Lname, role } = action.payload;
       state.isAuthenticated = true;
-      state.id = action.payload.id;
-      state.username = action.payload.username;
-      // set other user data from action.payload
+      state.id = id;
+      state.username = username;
+      state.email = email; // Store email
+      state.Fname = Fname;
+      state.Lname = Lname;
+      state.role = role;
+      // Set other user data from action.payload
     },
     logout: (state) => {
       state.isAuthenticated = false;
       state.id = null;
       state.username = null;
-      // reset other user data fields here
+      state.email = null; // Reset email
+      state.Fname = null;
+      state.Lname = null;
+      state.role = null;
+      // Reset other user data fields here
     },
-    // additional reducers can be added here
+    // Additional reducers can be added here
   },
 });
 
