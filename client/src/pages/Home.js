@@ -13,16 +13,6 @@ const Home = () => {
 
   // Fetch organizations from the backend when the component mounts
   useEffect(() => {
-   const fetchOrganizations = async () => {
-      try {
-        const response = await axios.get('https://localhost:8000/orgs/get');
-        setOrganizations(response.data); // Adjust according to your backend response structure
-      } catch (error) {
-        console.error('Failed to fetch organizations:', error);
-        // Optionally, set organizations to an empty array or show an error message
-      }
-    };
-
     fetchOrganizations();
   }, []); // Empty dependency array ensures this runs once on mount
 
@@ -33,7 +23,15 @@ const Home = () => {
   const handleCloseDialog = () => {
     setDialogOpen(false);
   };
-
+  const fetchOrganizations = async () => {
+    try {
+      const response = await axios.get('https://localhost:8000/orgs/get');
+      setOrganizations(response.data); // Adjust according to your backend response structure
+    } catch (error) {
+      console.error('Failed to fetch organizations:', error);
+      // Optionally, set organizations to an empty array or show an error message
+    }
+  };
   const handleOrganizationSelected = (organization) => {
     setSelectedOrganization(organization);
     // Additional logic when an organization is selected
@@ -55,8 +53,11 @@ const Home = () => {
           onAddOrJoinOrganization={handleAddOrJoinOrganization}
         />
         {/* Pass handleCreateOrganization to NewOrganizationDialog */}
-        {dialogOpen && <NewOrganizationDialog onClose={handleCloseDialog}  />
-}
+        {dialogOpen && (
+        <NewOrganizationDialog
+        onClose={handleCloseDialog}
+        onCreate={fetchOrganizations} />
+        )}
       </div>
     </div>
   );
