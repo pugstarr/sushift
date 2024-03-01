@@ -1,13 +1,23 @@
 // OrganizationDialog.js
 import React, { useState } from 'react';
+import axios from 'axios';
 import { X } from 'phosphor-react';
 
-const NewOrganizationDialog = ({ onClose }) => {
-  const [name, setName] = useState('');
+
+const NewOrganizationDialog = ({ onClose, onCreate }) => {
+  const [orgName, setName] = useState('');
   const [link, setLink] = useState('');
 
-  const handleCreate = () => {
-    // Logic to create a new organization with the provided name
+
+  const handleCreate =async(event) => {
+    event.preventDefault(); // Prevent default form submission behavior
+    try {
+        const response = await axios.post('https://localhost:8000/orgs/create', { name: orgName });
+        //onCreate(response.data.organization);
+        onClose(); // Close the dialog
+    } catch (error) {
+        console.error('Failed to create organization:', error);
+    }
     onClose();
   };
 
@@ -31,7 +41,7 @@ const NewOrganizationDialog = ({ onClose }) => {
               id="organizationName"
               className="mt-2 block w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-md text-white shadow placeholder-gray-500 focus:outline-none focus:border-green-500 focus:ring focus:ring-green-500 focus:ring-opacity-50"
               placeholder="Your organization's name"
-              value={name}
+              value={orgName}
               onChange={(e) => setName(e.target.value)}
             />
           </div>

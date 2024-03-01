@@ -1,18 +1,20 @@
-// Home.js
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Sidebar from '../components/Sidebar';
 import OrganizationDropdown from '../components/OrganizationDropdown';
-import NewOrganizationDialog from '../dialogs/NewOrganizationDialog'
+import NewOrganizationDialog from '../dialogs/NewOrganizationDialog';
 
 const Home = () => {
-  const [organizations, setOrganizations] = useState([
-    { id: 1, name: 'Organization One' },
-    { id: 2, name: 'Organization Two' },
-    // Add your initial state or fetch from an API
-  ]);
+  // State for organizations will now be initially empty and fetched from backend
+  const [organizations, setOrganizations] = useState([]);
 
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedOrganization, setSelectedOrganization] = useState(null);
+
+  // Fetch organizations from the backend when the component mounts
+  useEffect(() => {
+    fetchOrganizations();
+  }, []); // Empty dependency array ensures this runs once on mount
 
   const handleAddOrJoinOrganization = () => {
     setDialogOpen(true);
@@ -20,10 +22,17 @@ const Home = () => {
 
   const handleCloseDialog = () => {
     setDialogOpen(false);
+    fetchOrganizations();
   };
-
-  const [selectedOrganization, setSelectedOrganization] = useState(null);
-
+  const fetchOrganizations = async () => {
+    try {
+      const response = await axios.get('https://localhost:8000/orgs/get');
+      setOrganizations(response.data); // Adjust according to your backend response structure
+    } catch (error) {
+      console.error('Failed to fetch organizations:', error);
+      // Optionally, set organizations to an empty array or show an error message
+    }
+  };
   const handleOrganizationSelected = (organization) => {
     setSelectedOrganization(organization);
     // Additional logic when an organization is selected
@@ -44,7 +53,12 @@ const Home = () => {
           onOrganizationSelected={handleOrganizationSelected}
           onAddOrJoinOrganization={handleAddOrJoinOrganization}
         />
-        {dialogOpen && <NewOrganizationDialog onClose={handleCloseDialog} />}
+        {/* Pass handleCreateOrganization to NewOrganizationDialog */}
+        {dialogOpen && (
+        <NewOrganizationDialog
+        onClose={handleCloseDialog}/>
+        //onCreate={fetchOrganizations} />
+        )}
       </div>
     </div>
   );

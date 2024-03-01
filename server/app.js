@@ -40,6 +40,8 @@ app.use(express.json()); // For parsing application/json
 // Routes
 const userRoutes = require('./routes/users');
 app.use('/users', userRoutes);
+const organizationRoutes = require('./routes/orgs');
+app.use('/orgs', organizationRoutes);
 
 // Start server
 https.createServer(credentials, app).listen(PORT, () => {

@@ -28,16 +28,16 @@ const OrganizationDropdown = ({ organizations, onOrganizationSelected, onAddOrJo
       {isOpen && (
         <div className="absolute right-0 mt-2" style={{width: `${buttonWidth}px`}}>
           <div className="bg-gray-800 rounded-lg shadow-xl">
-            {organizations.map((org) => (
-              <a
-                key={org.id}
-                href="#!"
-                className="block px-4 py-2 text-sm hover:border-green-700 border-2 border-transparent transition-all duration-200"
-                onClick={() => { onOrganizationSelected(org); setIsOpen(false); }}
-              >
-                {org.name}
-              </a>
-            ))}
+          {organizations.map((org) => (
+            <a
+              key={org._id} // Make sure org.id is unique for each organization
+              href='button'
+              className="block px-4 py-2 text-sm hover:border-green-700 border-2 border-transparent transition-all duration-200"
+              onClick={() => { onOrganizationSelected(org); setIsOpen(false); }}
+            >
+              {org.name}
+            </a>
+          ))}
             <div className="flex items-center justify-start mt-2 px-4 py-2 hover:border-green-700 border-2 border-transparent transition-all duration-200">
               <Plus size={20} className="text-green-500 mr-2" />
               <a href="#!" className="font-bold" onClick={onAddOrJoinOrganization}>
