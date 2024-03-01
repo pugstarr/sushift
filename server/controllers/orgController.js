@@ -75,9 +75,19 @@ const deleteOrganization = async (req, res) => {
   }
 };
 
+const getOrganizations =  async (req, res) => {
+    try {
+      const organizations = await Organization.find({});
+      res.json(organizations);
+    } catch (err) {
+      res.status(500).json({ msg: 'Server error' });
+    }
+  };
+
 module.exports = {
   createOrganization,
   addUserToOrganization,
   removeUserFromOrganization,
-  deleteOrganization
+  deleteOrganization,
+  getOrganizations
 };

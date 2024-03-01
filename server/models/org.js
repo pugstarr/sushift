@@ -6,4 +6,4 @@ const organizationSchema = new mongoose.Schema({
   //todo mayb a managers one?
 });
 
-module.exports = mongoose.model('Organization', organizationSchema);
+module.exports = mongoose.model('Organizations', organizationSchema);

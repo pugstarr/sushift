@@ -1,18 +1,30 @@
-// Home.js
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Sidebar from '../components/Sidebar';
 import OrganizationDropdown from '../components/OrganizationDropdown';
-import NewOrganizationDialog from '../dialogs/NewOrganizationDialog'
+import NewOrganizationDialog from '../dialogs/NewOrganizationDialog';
 
 const Home = () => {
-  const [organizations, setOrganizations] = useState([
-    { id: 1, name: 'Organization One' },
-    { id: 2, name: 'Organization Two' },
-    // Add your initial state or fetch from an API
-  ]);
+  // State for organizations will now be initially empty and fetched from backend
+  const [organizations, setOrganizations] = useState([]);
 
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedOrganization, setSelectedOrganization] = useState(null);
+
+  // Fetch organizations from the backend when the component mounts
+  useEffect(() => {
+    const fetchOrganizations = async () => {
+      try {
+        const response = await axios.get('https://localhost:8000/orgs/get');
+        setOrganizations(response.data); // Adjust according to your backend response structure
+      } catch (error) {
+        console.error('Failed to fetch organizations:', error);
+        // Optionally, set organizations to an empty array or show an error message
+      }
+    };
+
+    fetchOrganizations();
+  }, []); // Empty dependency array ensures this runs once on mount
 
   const handleAddOrJoinOrganization = () => {
     setDialogOpen(true);
@@ -22,11 +34,21 @@ const Home = () => {
     setDialogOpen(false);
   };
 
-  const [selectedOrganization, setSelectedOrganization] = useState(null);
-
   const handleOrganizationSelected = (organization) => {
     setSelectedOrganization(organization);
     // Additional logic when an organization is selected
+  };
+
+  // Function to handle creating a new organization
+  const handleCreateOrganization = async (newOrgName) => {
+    try {
+      const response = await axios.post('https://localhost:8000/orgs/create', { name: newOrgName });
+      setOrganizations(prev => [...prev, response.data.organization]); // Assuming the backend sends back the created organization
+      setDialogOpen(false); // Close the dialog after creation
+    } catch (error) {
+      console.error('Failed to create organization:', error);
+      // Handle error, such as showing an error message to the user
+    }
   };
 
   return (
@@ -44,7 +66,8 @@ const Home = () => {
           onOrganizationSelected={handleOrganizationSelected}
           onAddOrJoinOrganization={handleAddOrJoinOrganization}
         />
-        {dialogOpen && <NewOrganizationDialog onClose={handleCloseDialog} />}
+        {/* Pass handleCreateOrganization to NewOrganizationDialog */}
+        {dialogOpen && <NewOrganizationDialog onClose={handleCloseDialog} onCreate={handleCreateOrganization} />}
       </div>
     </div>
   );
