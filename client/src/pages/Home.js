@@ -22,6 +22,7 @@ const Home = () => {
 
   const handleCloseDialog = () => {
     setDialogOpen(false);
+    fetchOrganizations();
   };
   const fetchOrganizations = async () => {
     try {
@@ -55,8 +56,8 @@ const Home = () => {
         {/* Pass handleCreateOrganization to NewOrganizationDialog */}
         {dialogOpen && (
         <NewOrganizationDialog
-        onClose={handleCloseDialog}
-        onCreate={fetchOrganizations} />
+        onClose={handleCloseDialog}/>
+        //onCreate={fetchOrganizations} />
         )}
       </div>
     </div>
