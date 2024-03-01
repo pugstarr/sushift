@@ -2,13 +2,21 @@
 import React, { useState } from 'react';
 import { X } from 'phosphor-react';
 
-const NewOrganizationDialog = ({ onClose }) => {
+const NewOrganizationDialog = ({ onClose, oncCreate }) => {
   const [name, setName] = useState('');
   const [link, setLink] = useState('');
+  const [orgName, setOrgName] = useState('');
 
-  const handleCreate = () => {
-    // Logic to create a new organization with the provided name
-    onClose();
+
+  const handleCreate =async(event) => {
+    event.preventDefault(); // Prevent default form submission behavior
+    try {
+        const response = await axios.post('http://localhost:8000/orgs/create', { name: orgName });
+        onCreate(response.data.organization); // Assuming your backend returns the created organization
+        onClose(); // Close the dialog
+    } catch (error) {
+        console.error('Failed to create organization:', error);
+    }
   };
 
   const handleJoin = () => {
