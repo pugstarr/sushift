@@ -14,7 +14,7 @@ const OrganizationDropdown = ({ organizations, onOrganizationSelected, onAddOrJo
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
-  const placeholderText = organizations.length > 0 ? organizations[0].name : "Select Organization";
+  const placeholderText = "Select Organization";
 
   return (
     <div className="relative inline-block text-white" ref={buttonRef}>
