@@ -3,18 +3,16 @@ import axios from 'axios';
 import Sidebar from '../components/Sidebar';
 import OrganizationDropdown from '../components/OrganizationDropdown';
 import NewOrganizationDialog from '../dialogs/NewOrganizationDialog';
+import EmployeesBox from '../components/EmployeeBox'; // Import the EmployeesBox component
 
 const Home = () => {
-  // State for organizations will now be initially empty and fetched from backend
   const [organizations, setOrganizations] = useState([]);
-
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedOrganization, setSelectedOrganization] = useState(null);
 
-  // Fetch organizations from the backend when the component mounts
   useEffect(() => {
     fetchOrganizations();
-  }, []); // Empty dependency array ensures this runs once on mount
+  }, []);
 
   const handleAddOrJoinOrganization = () => {
     setDialogOpen(true);
@@ -24,28 +22,30 @@ const Home = () => {
     setDialogOpen(false);
     fetchOrganizations();
   };
+
   const fetchOrganizations = async () => {
     try {
       const response = await axios.get('https://localhost:8000/orgs/get');
-      setOrganizations(response.data); // Adjust according to your backend response structure
+      setOrganizations(response.data);
     } catch (error) {
       console.error('Failed to fetch organizations:', error);
-      // Optionally, set organizations to an empty array or show an error message
     }
   };
+
   const handleOrganizationSelected = (organization) => {
     setSelectedOrganization(organization);
-    // Additional logic when an organization is selected
   };
 
-  return (
+  const handleAddEmployee = () => {
+    // Placeholder for future implementation
+    console.log('Add employee button clicked');
+  };
+
+return (
     <div className="flex min-h-screen bg-gradient-to-br from-gray-900 to-green-800 text-white relative">
       <Sidebar />
       <div className="flex-1 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold">Coming Soon</h1>
-          <p className="mt-4 text-lg">Stay tuned for something amazing.</p>
-        </div>
+        {/* Existing content */}
       </div>
       <div className="absolute top-16 left-72">
         <OrganizationDropdown
@@ -53,13 +53,15 @@ const Home = () => {
           onOrganizationSelected={handleOrganizationSelected}
           onAddOrJoinOrganization={handleAddOrJoinOrganization}
         />
-        {/* Pass handleCreateOrganization to NewOrganizationDialog */}
         {dialogOpen && (
-        <NewOrganizationDialog
-        onClose={handleCloseDialog}/>
-        //onCreate={fetchOrganizations} />
+          <NewOrganizationDialog onClose={handleCloseDialog} />
         )}
       </div>
+      {/* Adjust the EmployeesBox component with new style props */}
+      <EmployeesBox
+        onAddEmployee={handleAddEmployee}
+        style={{ top: 'calc(16px + 50px)', left: '72px' }} // Position it below the dropdown
+      />
     </div>
   );
 };
