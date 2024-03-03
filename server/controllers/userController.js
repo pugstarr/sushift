@@ -2,6 +2,7 @@
 const User = require('../models/User');
 //const logger = require('../logger'); idk what this is used for
 const bcrypt = require('bcrypt');
+const TempUser = require('../models/TempUser');
 
 // User Registration
 const registerUser = async (req, res) => {

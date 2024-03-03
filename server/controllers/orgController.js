@@ -1,5 +1,6 @@
 const Organization = require('../models/org');
 const User = require('../models/User');
+const TempUser = require('../models/TempUser');
 
 // Create new org
 const createOrganization = async (req, res) => {
@@ -47,6 +48,17 @@ const addUserToOrganization = async (req, res) => {
     res.json({ msg: 'User added to organization successfully', organization });
   } catch (err) {
     res.status(500).json({ msg: 'Server error' });
+  }
+};
+
+const addTempUserToOrganization = async (req, res) => {
+  const { name } = req.body;
+  try {
+    let tempUser = new TempUser({ name });
+    await tempUser.save();
+    res.status(201).json({ msg: 'Temp user added successfully', tempUser });
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error', error: err.message });
   }
 };
 
@@ -101,5 +113,6 @@ module.exports = {
   addUserToOrganization,
   removeUserFromOrganization,
   deleteOrganization,
-  getOrganizations
+  getOrganizations,
+  addTempUserToOrganization
 };

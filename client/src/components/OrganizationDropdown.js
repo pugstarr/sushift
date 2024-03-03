@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { CaretUp, Plus } from 'phosphor-react';
+import { useDispatch } from 'react-redux';
+import { setCurrentOrganization } from '../redux/slices/userSlice';
 
 const OrganizationDropdown = ({ organizations, onOrganizationSelected, onAddOrJoinOrganization }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,8 +18,15 @@ const OrganizationDropdown = ({ organizations, onOrganizationSelected, onAddOrJo
 
   const placeholderText = "Select Organization";
 
+  const dispatch = useDispatch();
+
+  const handleOrganizationSelected = (org) => {
+    onOrganizationSelected(org);
+    dispatch(setCurrentOrganization(org));
+  };
+
   return (
-    <div className="relative inline-block text-white" ref={buttonRef}>
+    <div style={{ zIndex: 20 }} className="relative inline-block text-white" ref={buttonRef}>
       <div 
         onClick={toggleDropdown} 
         className="cursor-pointer bg-transparent py-2 flex items-center justify-between"

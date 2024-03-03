@@ -33,12 +33,15 @@ export const userSlice = createSlice({
       state.role = null;
       // Reset other user data fields here
     },
+    setCurrentOrganization: (state, action) => {
+      state.currentOrganization = action.payload;
+    },
     // Additional reducers can be added here
   },
 });
 
 // Export actions
-export const { login, logout } = userSlice.actions;
+export const { login, logout, setCurrentOrganization } = userSlice.actions;
 
 // Export reducer
 export default userSlice.reducer;
