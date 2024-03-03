@@ -3,6 +3,7 @@ import axios from 'axios';
 import Sidebar from '../components/Sidebar';
 import OrganizationDropdown from '../components/OrganizationDropdown';
 import NewOrganizationDialog from '../dialogs/NewOrganizationDialog';
+import { useSelector } from 'react-redux';
 
 const Home = () => {
   // State for organizations will now be initially empty and fetched from backend
@@ -10,6 +11,9 @@ const Home = () => {
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedOrganization, setSelectedOrganization] = useState(null);
+
+  //grab the user id
+  const userid = useSelector(state => state.user.id);
 
   // Fetch organizations from the backend when the component mounts
   useEffect(() => {
@@ -26,7 +30,7 @@ const Home = () => {
   };
   const fetchOrganizations = async () => {
     try {
-      const response = await axios.get('https://localhost:8000/orgs/get');
+      const response = await axios.get('https://localhost:8000/orgs/get', { userId: userid });
       setOrganizations(response.data); // Adjust according to your backend response structure
     } catch (error) {
       console.error('Failed to fetch organizations:', error);

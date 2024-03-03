@@ -87,6 +87,7 @@ const deleteOrganization = async (req, res) => {
 };
 
 const getOrganizations =  async (req, res) => {
+  //const {userId} = req.body // so you can only see ur own orgs, for later tho
     try {
       const organizations = await Organization.find({});
       res.json(organizations);

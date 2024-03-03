@@ -8,7 +8,6 @@ import { useSelector } from 'react-redux';
 const NewOrganizationDialog = ({ onClose, onCreate }) => {
   const [orgName, setName] = useState('');
   const [link, setLink] = useState('');
-  const[orgCode] = useState('');
   const userId = useSelector(state => state.user.id);
 
 
