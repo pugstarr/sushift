@@ -39,6 +39,17 @@ const addUserToOrganization = async (req, res) => {
   }
 };
 
+const addTempUserToOrganization = async (req, res) => {
+  const { name } = req.body;
+  try {
+    let tempUser = new TempUser({ name });
+    await tempUser.save();
+    res.status(201).json({ msg: 'Temp user added successfully', tempUser });
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
+};
+
 // Remove a user
 const removeUserFromOrganization = async (req, res) => {
   const { userId, orgId } = req.body;
@@ -89,5 +100,6 @@ module.exports = {
   addUserToOrganization,
   removeUserFromOrganization,
   deleteOrganization,
-  getOrganizations
+  getOrganizations,
+  addTempUserToOrganization
 };
