@@ -1,27 +1,25 @@
 import React, { useState } from 'react';
-import axios from 'axios'; // Make sure axios is installed
+import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faTimes, faPlus } from '@fortawesome/free-solid-svg-icons'; 
-
+import { faArrowLeft, faTimes, faPlus, faClock } from '@fortawesome/free-solid-svg-icons';
+import EditEmployeeModal from './EditEmployeeModal'; // Ensure this path is correct
 
 const EmployeesBox = () => {
   const [employees, setEmployees] = useState([]);
   const [newEmployeeName, setNewEmployeeName] = useState('');
   const [showInputForm, setShowInputForm] = useState(false);
+  const [editingEmployee, setEditingEmployee] = useState(null); // State for the employee being edited
 
   const handleAddEmployee = async (e) => {
     e.preventDefault();
     if (!newEmployeeName.trim()) return;
 
     try {
-      // Replace with your actual backend endpoint
       const response = await axios.post('https://localhost:8000/orgs/addTempUser', { name: newEmployeeName });
       console.log('Employee added:', response.data);
-      // Assuming the response includes the newly added employee
       setEmployees([...employees, newEmployeeName]);
     } catch (error) {
       console.error('Failed to add employee:', error);
-      // Handle error here, such as showing an error message to the user
     }
 
     setNewEmployeeName('');
@@ -35,6 +33,13 @@ const EmployeesBox = () => {
   const handleCancel = () => {
     setShowInputForm(false);
     setNewEmployeeName('');
+  };
+
+  const handleCloseEditModal = (refresh) => {
+    setEditingEmployee(null);
+    if (refresh) {
+      // Optionally re-fetch or update the employees list here
+    }
   };
 
   return (
@@ -56,7 +61,7 @@ const EmployeesBox = () => {
           }}
           className="hover:bg-green-700 focus:outline-none"
         >
-          <FontAwesomeIcon icon={faPlus} /> {/* faPlus needs to be imported or replaced with the correct icon */}
+          <FontAwesomeIcon icon={faPlus} />
         </button>
       </div>
       {showInputForm && (
@@ -77,14 +82,16 @@ const EmployeesBox = () => {
         </form>
       )}
       <div className="mt-4">
-        <ul>
-          {employees.map((employee, index) => (
-            <li key={index} className="mt-2">
-              {employee}
-            </li>
-          ))}
-        </ul>
+        {employees.map((employee, index) => (
+          <div key={index} className="bg-gray-200 p-2 my-2 rounded-lg flex justify-between items-center">
+            {employee}
+            <FontAwesomeIcon icon={faClock} onClick={() => setEditingEmployee(employee)} className="text-gray-600 hover:text-gray-800 cursor-pointer" />
+          </div>
+        ))}
       </div>
+      {editingEmployee && (
+        <EditEmployeeModal employee={editingEmployee} onClose={handleCloseEditModal} />
+      )}
     </div>
   );
 };

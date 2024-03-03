@@ -62,6 +62,19 @@ const addTempUserToOrganization = async (req, res) => {
   }
 };
 
+const editTempUser = async (req, res) => {
+  const { id, name, availability } = req.body;
+  try {
+    const tempUser = await TempUser.findByIdAndUpdate(id, { name, availability }, { new: true });
+    if (!tempUser) {
+      return res.status(404).json({ msg: 'User not found' });
+    }
+    res.json({ msg: 'User updated successfully', tempUser });
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
+};
+
 // Remove a user
 const removeUserFromOrganization = async (req, res) => {
   const { userId, orgId } = req.body;
@@ -114,5 +127,6 @@ module.exports = {
   removeUserFromOrganization,
   deleteOrganization,
   getOrganizations,
-  addTempUserToOrganization
+  addTempUserToOrganization,
+  editTempUser
 };
