@@ -17,7 +17,7 @@ const OrganizationDropdown = ({ organizations, onOrganizationSelected, onAddOrJo
   const placeholderText = organizations.length > 0 ? organizations[0].name : "Select Organization";
 
   return (
-    <div className="relative inline-block text-white" ref={buttonRef}>
+    <div style={{ zIndex: 20 }} className="relative inline-block text-white" ref={buttonRef}>
       <div 
         onClick={toggleDropdown} 
         className="cursor-pointer bg-transparent py-2 flex items-center justify-between"
