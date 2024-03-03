@@ -1,16 +1,29 @@
 import React, { useState } from 'react';
+import axios from 'axios'; // Make sure axios is installed
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faTimes } from '@fortawesome/free-solid-svg-icons'; // Import faTimes for the "X" icon
+import { faArrowLeft, faTimes, faPlus } from '@fortawesome/free-solid-svg-icons'; 
+
 
 const EmployeesBox = () => {
   const [employees, setEmployees] = useState([]);
   const [newEmployeeName, setNewEmployeeName] = useState('');
   const [showInputForm, setShowInputForm] = useState(false);
 
-  const handleAddEmployee = (e) => {
+  const handleAddEmployee = async (e) => {
     e.preventDefault();
     if (!newEmployeeName.trim()) return;
-    setEmployees([...employees, newEmployeeName]);
+
+    try {
+      // Replace with your actual backend endpoint
+      const response = await axios.post('https://localhost:8000/orgs/addTempUser', { name: newEmployeeName });
+      console.log('Employee added:', response.data);
+      // Assuming the response includes the newly added employee
+      setEmployees([...employees, newEmployeeName]);
+    } catch (error) {
+      console.error('Failed to add employee:', error);
+      // Handle error here, such as showing an error message to the user
+    }
+
     setNewEmployeeName('');
     setShowInputForm(false);
   };
@@ -20,8 +33,8 @@ const EmployeesBox = () => {
   };
 
   const handleCancel = () => {
-    setShowInputForm(false); // Hide the input form
-    setNewEmployeeName(''); // Optionally reset the input field
+    setShowInputForm(false);
+    setNewEmployeeName('');
   };
 
   return (
@@ -43,7 +56,7 @@ const EmployeesBox = () => {
           }}
           className="hover:bg-green-700 focus:outline-none"
         >
-          +
+          <FontAwesomeIcon icon={faPlus} /> {/* faPlus needs to be imported or replaced with the correct icon */}
         </button>
       </div>
       {showInputForm && (
