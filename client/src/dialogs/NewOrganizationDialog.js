@@ -2,11 +2,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { X } from 'phosphor-react';
+import { useSelector } from 'react-redux';
 
 
 const NewOrganizationDialog = ({ onClose, onCreate }) => {
   const [orgName, setName] = useState('');
   const [link, setLink] = useState('');
+  const userId = useSelector(state => state.user.id);
 
 
   const handleCreate =async(event) => {
@@ -21,8 +23,14 @@ const NewOrganizationDialog = ({ onClose, onCreate }) => {
     onClose();
   };
 
-  const handleJoin = () => {
-    // Logic to join an organization with the provided link
+  const handleJoin = async(event) => {
+    event.preventDefault();
+    try{
+      const response = await axios.post('https://localhost:8000/orgs/addUser', {userId: userId, orgId : link});
+      onClose();
+    } catch(error){
+      console.error('aye', error);
+    }
     onClose();
   };
 

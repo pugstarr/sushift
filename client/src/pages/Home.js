@@ -3,16 +3,21 @@ import axios from 'axios';
 import Sidebar from '../components/Sidebar';
 import OrganizationDropdown from '../components/OrganizationDropdown';
 import NewOrganizationDialog from '../dialogs/NewOrganizationDialog';
-import EmployeesBox from '../components/EmployeeBox'; // Import the EmployeesBox component
+import EmployeesBox from '../components/EmployeesBox'; // Ensure this path is correct
+import { useSelector } from 'react-redux';
 
 const Home = () => {
   const [organizations, setOrganizations] = useState([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedOrganization, setSelectedOrganization] = useState(null);
 
+  // Grab the user ID from the Redux state
+  const userId = useSelector(state => state.user.id);
+
+  // Fetch organizations from the backend when the component mounts
   useEffect(() => {
     fetchOrganizations();
-  }, []);
+  }, [userId]); // Add userId as a dependency to refetch if the user changes
 
   const handleAddOrJoinOrganization = () => {
     setDialogOpen(true);
@@ -25,15 +30,18 @@ const Home = () => {
 
   const fetchOrganizations = async () => {
     try {
-      const response = await axios.get('https://localhost:8000/orgs/get');
-      setOrganizations(response.data);
+      // Include the userId in the request if needed by your backend logic
+      const response = await axios.get(`https://localhost:8000/orgs/get?userId=${userId}`);
+      setOrganizations(response.data); // Adjust according to your backend response structure
     } catch (error) {
       console.error('Failed to fetch organizations:', error);
+      // Optionally, set organizations to an empty array or show an error message
     }
   };
 
   const handleOrganizationSelected = (organization) => {
     setSelectedOrganization(organization);
+    // Additional logic when an organization is selected, if necessary
   };
 
   const handleAddEmployee = () => {
@@ -41,11 +49,11 @@ const Home = () => {
     console.log('Add employee button clicked');
   };
 
-return (
+  return (
     <div className="flex min-h-screen bg-gradient-to-br from-gray-900 to-green-800 text-white relative">
       <Sidebar />
       <div className="flex-1 flex items-center justify-center">
-        {/* Existing content */}
+        {/* Existing content placeholder */}
       </div>
       <div className="absolute top-16 left-72">
         <OrganizationDropdown
@@ -57,10 +65,9 @@ return (
           <NewOrganizationDialog onClose={handleCloseDialog} />
         )}
       </div>
-      {/* Adjust the EmployeesBox component with new style props */}
       <EmployeesBox
         onAddEmployee={handleAddEmployee}
-        style={{ top: 'calc(16px + 50px)', left: '72px' }} // Position it below the dropdown
+        style={{ top: 'calc(16px + 50px)', left: '72px' }} // Adjust the positioning as needed
       />
     </div>
   );

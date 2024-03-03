@@ -9,7 +9,18 @@ const createOrganization = async (req, res) => {
     let organization = await Organization.findOne({ name });
     if (organization) return res.status(400).json({ msg: 'Organization already exists' });
 
-    organization = new Organization({ name });
+    // Generate a random, unique joinCode
+    let joinCode;
+    let isUnique = false;
+    while (!isUnique) {
+      joinCode = Math.floor(100000 + Math.random() * 900000); // Generates a 6-digit number
+      const existingOrganization = await Organization.findOne({ joinCode });
+      if (!existingOrganization) {
+        isUnique = true;
+      }
+    }
+
+    organization = new Organization({ name, joinCode });
     await organization.save();
     res.status(201).json({ msg: 'Organization created successfully', organization });
   } catch (err) {
@@ -19,9 +30,9 @@ const createOrganization = async (req, res) => {
 
 // Add user
 const addUserToOrganization = async (req, res) => {
-  const { userId, orgId } = req.body;
+  const { userId, joinCode } = req.body;
   try {
-    const organization = await Organization.findById(orgId);
+    const organization = await Organization.findOne(joinCode);
     const user = await User.findById(userId);
 
     if (!organization || !user) {
@@ -88,6 +99,7 @@ const deleteOrganization = async (req, res) => {
 };
 
 const getOrganizations =  async (req, res) => {
+  //const {userId} = req.body // so you can only see ur own orgs, for later tho
     try {
       const organizations = await Organization.find({});
       res.json(organizations);
