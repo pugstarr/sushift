@@ -3,7 +3,7 @@ import axios from 'axios';
 import Sidebar from '../components/Sidebar';
 import OrganizationDropdown from '../components/OrganizationDropdown';
 import NewOrganizationDialog from '../dialogs/NewOrganizationDialog';
-import EmployeesBox from '../components/EmployeesBox'; // Ensure this path is correct
+import EmployeeBox from '../components/EmployeeBox'; // Ensure this path is correct
 import { useSelector } from 'react-redux';
 
 const Home = () => {
@@ -65,7 +65,7 @@ const Home = () => {
           <NewOrganizationDialog onClose={handleCloseDialog} />
         )}
       </div>
-      <EmployeesBox
+      <EmployeeBox
         onAddEmployee={handleAddEmployee}
         style={{ top: 'calc(16px + 50px)', left: '72px' }} // Adjust the positioning as needed
       />
