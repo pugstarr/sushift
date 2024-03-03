@@ -5,11 +5,14 @@ import OrganizationDropdown from '../components/OrganizationDropdown';
 import NewOrganizationDialog from '../dialogs/NewOrganizationDialog';
 import EmployeeBox from '../components/EmployeeBox'; // Ensure this path is correct
 import { useSelector } from 'react-redux';
+import { setOrg } from '../redux/slices/orgSlice';
+import { useDispatch } from 'react-redux';
 
 const Home = () => {
   const [organizations, setOrganizations] = useState([]);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedOrganization, setSelectedOrganization] = useState(null);
+  //const [selectedOrganization, setSelectedOrganization] = useState(null);
+  const dispatch = useDispatch();
 
   // Grab the user ID from the Redux state
   const userId = useSelector(state => state.user.id);
@@ -40,7 +43,7 @@ const Home = () => {
   };
 
   const handleOrganizationSelected = (organization) => {
-    setSelectedOrganization(organization);
+    dispatch(setOrg(organization));
     // Additional logic when an organization is selected, if necessary
   };
 

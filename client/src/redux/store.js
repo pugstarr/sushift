@@ -1,18 +1,20 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
-import userReducer from './slices/userSlice'; // Adjust this import path as necessary
+import userReducer from './slices/userSlice'; 
+import orgReducer from './slices/orgSlice';
 
 // Configuration object for redux-persist
 const persistConfig = {
   key: 'root', // The key for localStorage
   storage, // The storage engine
-  whitelist: ['user'], // Only `user` state will be persisted
+  whitelist: ['user', 'org'],
 };
 
 // Combine reducers (if you have more reducers, include them here)
 const rootReducer = combineReducers({
   user: userReducer,
+  org: orgReducer
 });
 
 // Apply redux-persist to the rootReducer

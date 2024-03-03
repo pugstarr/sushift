@@ -1,12 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { CaretUp, Plus } from 'phosphor-react';
 import { useDispatch } from 'react-redux';
-import { setCurrentOrganization } from '../redux/slices/userSlice';
+import { useSelector } from 'react-redux';
+import { setOrg } from '../redux/slices/orgSlice';
 
 const OrganizationDropdown = ({ organizations, onOrganizationSelected, onAddOrJoinOrganization }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [buttonWidth, setButtonWidth] = useState(0); // State to store the button's width
   const buttonRef = useRef(null); // Ref for the button/text area
+  const currentOrg = useSelector(state => state.org.currentOrg);
 
   useEffect(() => {
     if (buttonRef.current) {
@@ -16,15 +18,19 @@ const OrganizationDropdown = ({ organizations, onOrganizationSelected, onAddOrJo
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
-  const placeholderText = "Select Organization";
+  const placeholderText = currentOrg ? currentOrg.name : "Select Organization";
 
   const dispatch = useDispatch();
 
   const handleOrganizationSelected = (org) => {
     onOrganizationSelected(org);
-    dispatch(setCurrentOrganization(org));
+    dispatch(setOrg({ orgId: org._id, joinCode: org.joinCode })); // Assuming 'org' has '_id' and 'joinCode' properties
   };
 
+  /*
+  todo:
+  come back to this later - darren
+  */
   return (
     <div style={{ zIndex: 20 }} className="relative inline-block text-white" ref={buttonRef}>
       <div 
@@ -40,9 +46,9 @@ const OrganizationDropdown = ({ organizations, onOrganizationSelected, onAddOrJo
           {organizations.map((org) => (
             <a
               key={org._id} // Make sure org.id is unique for each organization
-              href='button'
+              href='home'
               className="block px-4 py-2 text-sm hover:border-green-700 border-2 border-transparent transition-all duration-200"
-              onClick={() => { onOrganizationSelected(org); setIsOpen(false); }}
+              onClick={() => { handleOrganizationSelected(org); setIsOpen(false); }}
             >
               {org.name}
             </a>
