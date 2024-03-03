@@ -25,7 +25,7 @@ const EmployeesBox = () => {
   };
 
   return (
-    <div style={{ zIndex: 10 }} className="absolute top-48 left-72 bg-white text-black p-4 rounded-lg shadow-lg" style={{ minWidth: '300px' }}>
+    <div style={{ zIndex: 10, minWidth: '300px' }} className="absolute top-48 left-72 bg-white text-black p-4 rounded-lg shadow-lg">
       <div className="flex justify-between items-center">
         <h2 className="text-lg font-semibold">Employees</h2>
         <button
