@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { List, X, UserCircle, Gear, SignOut } from 'phosphor-react';
+import { useSelector } from 'react-redux';
+
 
 const SidebarItem = ({ icon, label, onClick }) => (
   <div 
@@ -14,9 +16,10 @@ const SidebarItem = ({ icon, label, onClick }) => (
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-
+  
   const toggleSidebar = () => setIsOpen(!isOpen);
 
+  const fName = useSelector(state => state.user.Fname);
   return (
     <div className="flex">
       {/* Mobile view menu icon */}
@@ -30,7 +33,7 @@ const Sidebar = () => {
         {/* Logo or branding area */}
         <div className="px-4 mb-10">
           <UserCircle size={48} className="h-12 w-12 mx-auto" />
-          <h2 className="text-center text-xl font-semibold mt-2">Brand</h2>
+          <h2 className="text-center text-xl font-semibold mt-2">{fName}</h2>
         </div>
 
         {/* Navigation items */}
