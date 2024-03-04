@@ -9,7 +9,7 @@ const OrganizationDropdown = ({ organizations, onOrganizationSelected, onAddOrJo
   const buttonRef = useRef(null);
 
   // Accessing current organization from Redux state
-  const currentOrganization = useSelector((state) => state.user.organization);
+  const currentOrganization = useSelector((state) => state.user.currentOrganization);
 
   useEffect(() => {
     if (buttonRef.current) {
