@@ -98,15 +98,17 @@ const deleteOrganization = async (req, res) => {
   }
 };
 
-const getOrganizations =  async (req, res) => {
-  //const {userId} = req.body // so you can only see ur own orgs, for later tho
-    try {
-      const organizations = await Organization.find({});
-      res.json(organizations);
-    } catch (err) {
-      res.status(500).json({ msg: 'Server error' });
-    }
-  };
+const getOrganizations = async (req, res) => {
+  const userId = req.query.userId; // Assuming you're passing the userId as a query parameter
+
+  try {
+    // Find organizations where the users array contains the userId
+    const organizations = await Organization.find({ users: userId });
+    res.json(organizations);
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
+};
 
 module.exports = {
   createOrganization,
