@@ -4,7 +4,8 @@ const TempUser = require('../models/TempUser');
 
 // Create new org
 const createOrganization = async (req, res) => {
-  const { name } = req.body;
+  const { name, userId } = req.body; // Assuming you pass the userId in the request body when creating an organization
+
   try {
     let organization = await Organization.findOne({ name });
     if (organization) return res.status(400).json({ msg: 'Organization already exists' });
@@ -20,11 +21,16 @@ const createOrganization = async (req, res) => {
       }
     }
 
-    organization = new Organization({ name, joinCode });
+    // Add the user's ID to the organization's users array when creating the organization
+    organization = new Organization({ name, joinCode, users: [userId] }); // Add the user ID here
     await organization.save();
+
+    // Optionally, you may want to ensure the user exists and update the user's information as needed
+    // This can be done similarly to how you add users to an organization in addUserToOrganization
+
     res.status(201).json({ msg: 'Organization created successfully', organization });
   } catch (err) {
-    res.status(500).json({ msg: 'Server error' });
+    res.status(500).json({ msg: 'Server error', error: err.message });
   }
 };
 

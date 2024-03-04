@@ -1,26 +1,23 @@
-// OrganizationDialog.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import { X } from 'phosphor-react';
 import { useSelector } from 'react-redux';
 
-
 const NewOrganizationDialog = ({ onClose, onCreate }) => {
   const [orgName, setName] = useState('');
   const [link, setLink] = useState('');
-  const userId = useSelector(state => state.user.id);
+  const userId = useSelector(state => state.user.id); // Get the user ID from Redux state
 
-
-  const handleCreate =async(event) => {
+  const handleCreate = async (event) => {
     event.preventDefault(); // Prevent default form submission behavior
     try {
-        const response = await axios.post('https://localhost:8000/orgs/create', { name: orgName });
-        //onCreate(response.data.organization);
+        // Include userId in the request body
+        const response = await axios.post('https://localhost:8000/orgs/create', { name: orgName, userId });
+        // onCreate(response.data.organization); Uncomment and use as needed
         onClose(); // Close the dialog
     } catch (error) {
         console.error('Failed to create organization:', error);
     }
-    onClose();
   };
 
   const handleJoin = async(event) => {
