@@ -3,7 +3,8 @@ import axios from 'axios';
 import Sidebar from '../components/Sidebar';
 import OrganizationDropdown from '../components/OrganizationDropdown';
 import NewOrganizationDialog from '../dialogs/NewOrganizationDialog';
-import EmployeeBox from '../components/EmployeeBox'; // Ensure this path is correct
+import EmployeeBox from '../components/EmployeeBox'; 
+import  Schedule from '../components/Schedule'; 
 import { useSelector } from 'react-redux';
 
 const Home = () => {
@@ -49,28 +50,26 @@ const Home = () => {
     console.log('Add employee button clicked');
   };
 
-  return (
-    <div className="flex min-h-screen bg-gradient-to-br from-gray-900 to-green-800 text-white relative">
+  const [employees, setEmployees] = useState([
+    { id: 1, name: 'Alice', schedule: { Monday: 'Morning', Tuesday: 'None', Wednesday: 'Night', Thursday: 'Full', Friday: 'None', Saturday: 'Morning', Sunday: 'None' }},
+    { id: 2, name: 'Bob', schedule: { Monday: 'Night', Tuesday: 'Full', Wednesday: 'None', Thursday: 'Morning', Friday: 'Night', Saturday: 'None', Sunday: 'Full' }},
+    // Add more employees as needed
+]);
+
+return (
+  <div className="flex min-h-screen bg-gradient-to-br from-gray-900 to-green-800 text-white relative">
       <Sidebar />
-      <div className="flex-1 flex items-center justify-center">
-        {/* Existing content placeholder */}
+      <div className="flex-1 flex flex-col items-center justify-center">
+          <OrganizationDropdown
+            organizations={organizations}
+            onOrganizationSelected={handleOrganizationSelected}
+            onAddOrJoinOrganization={handleAddOrJoinOrganization}
+          />
+          {dialogOpen && <NewOrganizationDialog onClose={handleCloseDialog} />}
+          <Schedule />
       </div>
-      <div className="absolute top-16 left-72">
-        <OrganizationDropdown
-          organizations={organizations}
-          onOrganizationSelected={handleOrganizationSelected}
-          onAddOrJoinOrganization={handleAddOrJoinOrganization}
-        />
-        {dialogOpen && (
-          <NewOrganizationDialog onClose={handleCloseDialog} />
-        )}
-      </div>
-      <EmployeeBox
-        onAddEmployee={handleAddEmployee}
-        style={{ top: 'calc(16px + 50px)', left: '72px' }} // Adjust the positioning as needed
-      />
-    </div>
-  );
+  </div>
+);
 };
 
 export default Home;

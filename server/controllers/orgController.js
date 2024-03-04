@@ -1,4 +1,4 @@
-const Organization = require('../models/org');
+const Organization = require('../models/Organization');
 const User = require('../models/User');
 const TempUser = require('../models/TempUser');
 
