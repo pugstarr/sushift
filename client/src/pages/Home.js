@@ -12,16 +12,15 @@ const Home = () => {
     const [selectedOrganization, setSelectedOrganization] = useState(null);
     const userId = useSelector(state => state.user.id);
 
+    const fetchOrganizations = async () => {
+        try {
+            const response = await axios.get(`https://localhost:8000/orgs/get?userId=${userId}`);
+            setOrganizations(response.data);
+        } catch (error) {
+            console.error('Failed to fetch organizations:', error);
+        }
+    };
     useEffect(() => {
-        const fetchOrganizations = async () => {
-            try {
-                const response = await axios.get(`https://localhost:8000/orgs/get?userId=${userId}`);
-                setOrganizations(response.data);
-            } catch (error) {
-                console.error('Failed to fetch organizations:', error);
-            }
-        };
-
         fetchOrganizations();
     }, [userId]);
 
