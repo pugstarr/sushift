@@ -6,7 +6,7 @@ import { login } from '../redux/slices/userSlice'; // Adjust this import path to
 
 function Login() {
     const navigate = useNavigate();
-    const dispatch = useDispatch(); // Hook to dispatch actions
+    const dispatch = useDispatch();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -16,11 +16,8 @@ function Login() {
             const response = await axios.post('https://localhost:8000/users/login', { email, password });
             console.log('Login successful', response.data);
 
-            // Assuming response.data returns an object with user details. Adjust according to your actual API response
-            // Destructure with alias if necessary to avoid "Cannot access 'email' before initialization" error
-            const { id, username, email: userEmail, Fname, Lname, role } = response.data.user; // Adjust based on actual response structure
+            const { id, username, email: userEmail, Fname, Lname, role } = response.data.user;
 
-            // Dispatch the login action with the relevant payload, including all necessary user details
             dispatch(login({ id, username, email: userEmail, Fname, Lname, role }));
 
             navigate('/home');
@@ -34,10 +31,10 @@ function Login() {
     };
 
     return (
-        <div className="flex min-h-screen w-full">
-            <div className="w-1/3 bg-gray-900 flex flex-col justify-center items-center p-8 text-white">
+        <div className="flex flex-wrap min-h-screen w-full">
+            <div className="w-full sm:w-1/2 lg:w-1/3 bg-gray-900 flex flex-col justify-center items-center p-8 text-white">
                 <h3 className="text-3xl font-bold mb-6">Log In</h3>
-                <form onSubmit={handleLogin} className="w-full max-w-xs">
+                <form onSubmit={handleLogin} className="w-full max-w-xs sm:max-w-sm">
                     <input
                         type="email"
                         name="email"
@@ -60,7 +57,7 @@ function Login() {
                     Don't have an account? Register here.
                 </button>
             </div>
-            <div className="w-2/3 bg-gradient-to-br from-black to-green-900 flex items-center justify-center p-8 text-white">
+            <div className="w-full sm:w-1/2 lg:w-2/3 bg-gradient-to-br from-black to-green-900 flex items-center justify-center p-8 text-white">
                 <h1 className="text-4xl lg:text-5xl font-bold max-w-lg text-center">Simplify your scheduling.</h1>
             </div>
         </div>
