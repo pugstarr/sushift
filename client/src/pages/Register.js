@@ -16,19 +16,18 @@ function Register() {
                 email,
                 password,
                 Fname: firstName, 
-                Lname: lastName,  
+                Lname: lastName,
             });
             console.log('Registration successful', response.data);
-            navigate('/login'); 
+            navigate('/login');
         } catch (error) {
             console.error('Registration error:', error.response ? error.response.data : error.message);
         }
     };
 
     return (
-        <div className="flex min-h-screen w-full">
-            {/* Registration Form */}
-            <div className="w-1/3 bg-gray-900 flex flex-col justify-center items-center px-8 py-12 text-white">
+        <div className="flex flex-wrap min-h-screen w-full">
+            <div className="w-full sm:w-1/2 lg:w-1/3 bg-gray-900 flex flex-col justify-center items-center px-8 py-12 text-white">
                 <h3 className="text-3xl font-bold mb-6">Create Account</h3>
                 <form onSubmit={handleRegister} className="w-full max-w-md">
                     <input
@@ -62,9 +61,7 @@ function Register() {
                     <button type="submit" className="p-3 bg-green-500 w-full rounded-md hover:bg-green-600 transition duration-200 ease-in-out">Register</button>
                 </form>
             </div>
-
-            {/* Right Side Content */}
-            <div className="w-2/3 bg-gradient-to-br from-black to-green-900 flex items-center justify-center p-8 text-white">
+            <div className="w-full sm:w-1/2 lg:w-2/3 bg-gradient-to-br from-black to-green-900 flex items-center justify-center p-8 text-white">
                 <h1 className="text-5xl font-bold max-w-lg text-center">Welcome to Sushift!</h1>
             </div>
         </div>

@@ -35,19 +35,20 @@ const Home = () => {
     const handleAddOrJoinOrganization = () => setDialogOpen(true);
     const handleCloseDialog = () => {
         setDialogOpen(false);
-        fetchOrganizations();
+        fetchOrganizations(); // Make sure this function is defined or use effect directly here if needed
     };
 
     const handleOrganizationSelected = (organization) => {
         setSelectedOrganization(organization);
-        // Here you might also want to fetch new data based on the selected organization
     };
 
     return (
-        <div className="flex min-h-screen bg-gradient-to-br from-gray-900 to-green-800 text-white">
-            <Sidebar />
-            <div className="flex-1">
-                <div className="pt-8 pl-6">
+        <div className="flex flex-wrap min-h-screen bg-gradient-to-br from-gray-900 to-green-800 text-white">
+            <div className="w-full sm:w-1/4 xl:w-1/5 min-h-screen"> {/* Ensure full height for the sidebar */}
+                <Sidebar />
+            </div>
+            <div className="flex-1 sm:w-3/4 xl:w-4/5">
+                <div className="pt-8 px-6">
                     <OrganizationDropdown
                         organizations={organizations}
                         onOrganizationSelected={handleOrganizationSelected}
@@ -55,7 +56,7 @@ const Home = () => {
                     />
                     {dialogOpen && <NewOrganizationDialog onClose={handleCloseDialog} />}
                 </div>
-                <div className="pt-16 pl-4 pr-4">
+                <div className="pt-16 px-4">
                     <Schedule />
                 </div>
             </div>
