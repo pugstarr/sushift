@@ -3,74 +3,57 @@ import axios from 'axios';
 import Sidebar from '../components/Sidebar';
 import OrganizationDropdown from '../components/OrganizationDropdown';
 import NewOrganizationDialog from '../dialogs/NewOrganizationDialog';
-import EmployeeBox from '../components/EmployeeBox'; // Ensure this path is correct
+import Schedule from '../components/Schedule';
 import { useSelector } from 'react-redux';
 
 const Home = () => {
-  const [organizations, setOrganizations] = useState([]);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedOrganization, setSelectedOrganization] = useState(null);
+    const [organizations, setOrganizations] = useState([]);
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [selectedOrganization, setSelectedOrganization] = useState(null);
+    const userId = useSelector(state => state.user.id);
 
-  // Grab the user ID from the Redux state
-  const userId = useSelector(state => state.user.id);
+    useEffect(() => {
+        const fetchOrganizations = async () => {
+            try {
+                const response = await axios.get(`https://localhost:8000/orgs/get?userId=${userId}`);
+                setOrganizations(response.data);
+            } catch (error) {
+                console.error('Failed to fetch organizations:', error);
+            }
+        };
 
-  // Fetch organizations from the backend when the component mounts
-  useEffect(() => {
-    fetchOrganizations();
-  }, [userId]); // Add userId as a dependency to refetch if the user changes
+        fetchOrganizations();
+    }, [userId]);
 
-  const handleAddOrJoinOrganization = () => {
-    setDialogOpen(true);
-  };
+    const handleAddOrJoinOrganization = () => setDialogOpen(true);
+    const handleCloseDialog = () => {
+        setDialogOpen(false);
+        fetchOrganizations();
+    };
 
-  const handleCloseDialog = () => {
-    setDialogOpen(false);
-    fetchOrganizations();
-  };
+    const handleOrganizationSelected = (organization) => {
+        setSelectedOrganization(organization);
+        // Here you might also want to fetch new data based on the selected organization
+    };
 
-  const fetchOrganizations = async () => {
-    try {
-      // Include the userId in the request if needed by your backend logic
-      const response = await axios.get(`https://localhost:8000/orgs/get?userId=${userId}`);
-      setOrganizations(response.data); // Adjust according to your backend response structure
-    } catch (error) {
-      console.error('Failed to fetch organizations:', error);
-      // Optionally, set organizations to an empty array or show an error message
-    }
-  };
-
-  const handleOrganizationSelected = (organization) => {
-    setSelectedOrganization(organization);
-    // Additional logic when an organization is selected, if necessary
-  };
-
-  const handleAddEmployee = () => {
-    // Placeholder for future implementation
-    console.log('Add employee button clicked');
-  };
-
-  return (
-    <div className="flex min-h-screen bg-gradient-to-br from-gray-900 to-green-800 text-white relative">
-      <Sidebar />
-      <div className="flex-1 flex items-center justify-center">
-        {/* Existing content placeholder */}
-      </div>
-      <div className="absolute top-16 left-72">
-        <OrganizationDropdown
-          organizations={organizations}
-          onOrganizationSelected={handleOrganizationSelected}
-          onAddOrJoinOrganization={handleAddOrJoinOrganization}
-        />
-        {dialogOpen && (
-          <NewOrganizationDialog onClose={handleCloseDialog} />
-        )}
-      </div>
-      <EmployeeBox
-        onAddEmployee={handleAddEmployee}
-        style={{ top: 'calc(16px + 50px)', left: '72px' }} // Adjust the positioning as needed
-      />
-    </div>
-  );
+    return (
+        <div className="flex min-h-screen bg-gradient-to-br from-gray-900 to-green-800 text-white">
+            <Sidebar />
+            <div className="flex-1">
+                <div className="pt-8 pl-6">
+                    <OrganizationDropdown
+                        organizations={organizations}
+                        onOrganizationSelected={handleOrganizationSelected}
+                        onAddOrJoinOrganization={handleAddOrJoinOrganization}
+                    />
+                    {dialogOpen && <NewOrganizationDialog onClose={handleCloseDialog} />}
+                </div>
+                <div className="pt-16 pl-4 pr-4">
+                    <Schedule />
+                </div>
+            </div>
+        </div>
+    );
 };
 
 export default Home;

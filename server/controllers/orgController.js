@@ -1,4 +1,4 @@
-const Organization = require('../models/org');
+const Organization = require('../models/Organization');
 const User = require('../models/User');
 const TempUser = require('../models/TempUser');
 
@@ -58,11 +58,39 @@ const addUserToOrganization = async (req, res) => {
 };
 
 const addTempUserToOrganization = async (req, res) => {
-  const { name } = req.body;
+  const { name, orgId } = req.body;
   try {
     let tempUser = new TempUser({ name });
     await tempUser.save();
+
+    const organization = await Organization.findById(orgId);
+    if (!organization) {
+      return res.status(404).json({ msg: 'Organization not found' });
+    }
+
+    organization.tempUsers.push(tempUser._id); // Assuming your Organization model has a tempUsers field
+    await organization.save();
+
     res.status(201).json({ msg: 'Temp user added successfully', tempUser });
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
+};
+
+const getTempUsersOfOrganization = async (req, res) => {
+  const { orgId } = req.params; // Extracting orgId from URL parameters
+
+  try {
+    const organization = await Organization.findById(orgId).populate('tempUsers');
+    if (!organization) {
+      return res.status(404).json({ msg: 'Organization not found' });
+    }
+
+    // Ensure that tempUsers is always an array
+    const tempUsers = organization.tempUsers || [];
+
+    // Send back the temp users of the organization
+    res.json({ tempUsers });
   } catch (err) {
     res.status(500).json({ msg: 'Server error', error: err.message });
   }
@@ -122,5 +150,6 @@ module.exports = {
   removeUserFromOrganization,
   deleteOrganization,
   getOrganizations,
-  addTempUserToOrganization
+  addTempUserToOrganization,
+  getTempUsersOfOrganization
 };
