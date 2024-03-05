@@ -66,7 +66,7 @@ const Schedule = () => {
                     <tr>
                         <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Employees
-                            <button onClick={toggleInputForm} className="ml-2 bg-green-500 hover:bg-green-700 text-white p-1 rounded-full">
+                            <button onClick={toggleInputForm} className="ml-2 bg-green-500 hover:bg-green-700 text-white py-1 px-4 rounded-lg">
                                 <FontAwesomeIcon icon={faPlus} />
                             </button>
                             {showInputForm && (
