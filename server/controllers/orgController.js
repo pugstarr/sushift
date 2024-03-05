@@ -38,11 +38,14 @@ const createOrganization = async (req, res) => {
 const addUserToOrganization = async (req, res) => {
   const { userId, joinCode } = req.body;
   try {
-    const organization = await Organization.findOne(joinCode);
+    const organization = await Organization.findOne({joinCode : joinCode});
     const user = await User.findById(userId);
 
-    if (!organization || !user) {
-      return res.status(404).json({ msg: 'Organization or user not found' });
+    if (!organization ) {
+      return res.status(404).json({ msg: 'Organization not found' });
+    }
+    if (!user ) {
+      return res.status(404).json({ msg: 'User not found' });
     }
 
     // Prevent dups
