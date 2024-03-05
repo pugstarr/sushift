@@ -9,5 +9,6 @@ router.post('/removeUser', organizationController.removeUserFromOrganization);
 router.delete('/delete', organizationController.deleteOrganization);
 router.get('/get',organizationController.getOrganizations);
 router.post('/addTempUser', organizationController.addTempUserToOrganization);
+router.get('/:orgId/tempUsers', organizationController.getTempUsersOfOrganization);
 
 module.exports = router;
