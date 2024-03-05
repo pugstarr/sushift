@@ -9,6 +9,7 @@ function Login() {
     const dispatch = useDispatch(); // Hook to dispatch actions
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -25,7 +26,9 @@ function Login() {
 
             navigate('/home');
         } catch (error) {
-            console.error('Login error:', error.response ? error.response.data : error.message);
+            const message = error.response ? error.response.data.message : error.message;
+            alert('Email or Password Incorrect.');
+            console.error('Login error:', message);
         }
     };
 
