@@ -1,31 +1,19 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const https = require('https');
-const fs = require('fs'); 
 
 const app = express();
 
+// If you're still using environment variables for other settings like DB connection
 require('dotenv').config();
 
 const PORT = process.env.PORT || 8000;
-
-
 
 app.use(cors({
     origin: 'http://localhost:3000',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
 }));
-
-const privateKeyPath = process.env.PRIVATE_KEY_PATH;
-const certificatePath = process.env.CERTIFICATE_PATH;
-
-const privateKey = fs.readFileSync(privateKeyPath, 'utf8');
-const certificate = fs.readFileSync(certificatePath, 'utf8');
-
-
-const credentials = { key: privateKey, cert: certificate };
 
 // MongoDB connection using Mongoose
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -44,6 +32,6 @@ const organizationRoutes = require('./routes/orgs');
 app.use('/orgs', organizationRoutes);
 
 // Start server
-https.createServer(credentials, app).listen(PORT, () => {
-    console.log(`HTTPS Server running on port ${PORT}`);
+app.listen(PORT, () => {
+    console.log(`HTTP Server running on port ${PORT}`);
 });

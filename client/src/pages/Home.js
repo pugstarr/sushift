@@ -20,7 +20,15 @@ const Home = () => {
             console.error('Failed to fetch organizations:', error);
         }
     };
-    useEffect(() => {
+        useEffect(() => {
+        const fetchOrganizations = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8000/orgs/get?userId=${userId}`);
+                setOrganizations(response.data);
+            } catch (error) {
+                console.error('Failed to fetch organizations:', error);
+            }
+        };
         fetchOrganizations();
     }, [userId]);
 
