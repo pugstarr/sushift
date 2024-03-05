@@ -76,6 +76,6 @@ Sushift requires running both the client and the server side. You will need two 
    npm run dev
    ```
 
-   This command will start the backend server, which by default is accessible via `https://localhost:8000`.
+   This command will start the backend server, which by default is accessible via `http://localhost:8000`.
 
 Now, both the client and server sides of the Sushift application should be running, and you can begin using the application locally.

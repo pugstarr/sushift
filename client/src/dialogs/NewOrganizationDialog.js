@@ -12,7 +12,7 @@ const NewOrganizationDialog = ({ onClose, onCreate }) => {
     event.preventDefault(); // Prevent default form submission behavior
     try {
         // Include userId in the request body
-        const response = await axios.post('https://localhost:8000/orgs/create', { name: orgName, userId });
+        const response = await axios.post('http://localhost:8000/orgs/create', { name: orgName, userId });
         // onCreate(response.data.organization); Uncomment and use as needed
         onClose(); // Close the dialog
     } catch (error) {
@@ -23,7 +23,7 @@ const NewOrganizationDialog = ({ onClose, onCreate }) => {
   const handleJoin = async(event) => {
     event.preventDefault();
     try{
-      const response = await axios.post('https://localhost:8000/orgs/addUser', {userId: userId, orgId : link});
+      const response = await axios.post('http://localhost:8000/orgs/addUser', {userId: userId, orgId : link});
       onClose();
     } catch(error){
       console.error('aye', error);

@@ -15,7 +15,7 @@ const Home = () => {
     useEffect(() => {
         const fetchOrganizations = async () => {
             try {
-                const response = await axios.get(`https://localhost:8000/orgs/get?userId=${userId}`);
+                const response = await axios.get(`http://localhost:8000/orgs/get?userId=${userId}`);
                 setOrganizations(response.data);
             } catch (error) {
                 console.error('Failed to fetch organizations:', error);

@@ -15,7 +15,7 @@ const EmployeesBox = () => {
 
     try {
       // Replace with your actual backend endpoint
-      const response = await axios.post('https://localhost:8000/orgs/addTempUser', { name: newEmployeeName });
+      const response = await axios.post('http://localhost:8000/orgs/addTempUser', { name: newEmployeeName });
       console.log('Employee added:', response.data);
       // Assuming the response includes the newly added employee
       setEmployees([...employees, newEmployeeName]);
