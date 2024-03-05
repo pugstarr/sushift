@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 const Home = () => {
     const [organizations, setOrganizations] = useState([]);
     const [dialogOpen, setDialogOpen] = useState(false);
+    const [selectedOrganization, setSelectedOrganization] = useState(null);
     const userId = useSelector(state => state.user.id);
 
     useEffect(() => {
@@ -30,13 +31,19 @@ const Home = () => {
         fetchOrganizations();
     };
 
+    const handleOrganizationSelected = (organization) => {
+        setSelectedOrganization(organization);
+        // Here you might also want to fetch new data based on the selected organization
+    };
+
     return (
         <div className="flex min-h-screen bg-gradient-to-br from-gray-900 to-green-800 text-white">
             <Sidebar />
             <div className="flex-1">
-                <div className="pt-8 pl-6"> {/* Increased padding-top for more space */}
+                <div className="pt-8 pl-6">
                     <OrganizationDropdown
                         organizations={organizations}
+                        onOrganizationSelected={handleOrganizationSelected}
                         onAddOrJoinOrganization={handleAddOrJoinOrganization}
                     />
                     {dialogOpen && <NewOrganizationDialog onClose={handleCloseDialog} />}
