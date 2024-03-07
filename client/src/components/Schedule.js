@@ -16,12 +16,15 @@ const Schedule = () => {
     const [activeCell, setActiveCell] = useState({ employeeName: '', day: '' });
     //const weekOfTitle = `Week of ${weekStart} - ${weekEnd}`; // name
     const orgId = useSelector(state => state.user.currentOrganization?._id);
+    const API_URL = process.env.NODE_ENV === 'development'
+        ? 'http://localhost:8000'
+        : 'https://sushift-server-lime.vercel.app';
 
     useEffect(() => {
         const loadTempUsers = async () => {
             if (orgId) {
                 try {
-                    const response = await axios.get(`http://localhost:8000/orgs/${orgId}/tempUsers`);
+                    const response = await axios.get(`${API_URL}/orgs/${orgId}/tempUsers`);
                     setEmployees(response.data.tempUsers);
                 } catch (error) {
                     console.error('Failed to load temp users:', error);
@@ -38,7 +41,7 @@ const Schedule = () => {
         if (!newEmployeeName.trim() || !orgId) return;
 
         try {
-            await axios.post('http://localhost:8000/orgs/addTempUser', { name: newEmployeeName, orgId });
+            await axios.post(`${API_URL}/orgs/addTempUser`, { name: newEmployeeName, orgId });
             setNewEmployeeName('');
             setShowInputForm(false);
             loadTempUsers(); // Refresh the list after adding

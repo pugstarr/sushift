@@ -11,10 +11,13 @@ const Home = () => {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selectedOrganization, setSelectedOrganization] = useState(null);
     const userId = useSelector(state => state.user.id);
+    const API_URL = process.env.NODE_ENV === 'development'
+        ? 'http://localhost:8000'
+        : 'https://sushift-server-lime.vercel.app';
 
     const fetchOrganizations = async () => {
         try {
-            const response = await axios.get(`https://localhost:8000/orgs/get?userId=${userId}`);
+            const response = await axios.get(`${API_URL}/orgs/get?userId=${userId}`);
             setOrganizations(response.data);
         } catch (error) {
             console.error('Failed to fetch organizations:', error);

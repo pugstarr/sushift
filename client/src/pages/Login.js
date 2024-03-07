@@ -10,11 +10,14 @@ function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const API_URL = process.env.NODE_ENV === 'development'
+        ? 'http://localhost:8000'
+        : 'https://sushift-server-lime.vercel.app';
 
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8000/users/login', { email, password });
+            const response = await axios.post(`${API_URL}/users/login`, { email, password });
             console.log('Login successful', response.data);
 
             const { id, username, email: userEmail, Fname, Lname, role } = response.data.user;
