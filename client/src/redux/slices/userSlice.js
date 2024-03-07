@@ -28,6 +28,7 @@ export const userSlice = createSlice({
       state.id = null;
       state.username = null;
       state.email = null; // Reset email
+      state.currentOrganization = null;
       state.Fname = null;
       state.Lname = null;
       state.role = null;
