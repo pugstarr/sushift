@@ -37,7 +37,6 @@ const loginUser = async (req, res) => {
         return res.status(400).json({ msg: 'Invalid Credentials' });
     }
 
-    // User is found and password matches
     res.json({
       msg: 'User logged in successfully',
       user: {

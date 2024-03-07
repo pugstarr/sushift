@@ -10,7 +10,7 @@ const persistConfig = {
   whitelist: ['user'], // Only `user` state will be persisted
 };
 
-// Combine reducers (if you have more reducers, include them here)
+
 const rootReducer = combineReducers({
   user: userReducer,
 });
@@ -35,5 +35,4 @@ export const store = configureStore({
 });
 
 
-// Create a persistor for the store
 export const persistor = persistStore(store);

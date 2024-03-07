@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const dayScheduleSchema = new mongoose.Schema({
-    morning: [String], // Assuming these are usernames or user IDs
+    morning: [String], 
     night: [String],
     fullDay: [String]
 });
@@ -10,7 +10,7 @@ const userScheduleSchema = new mongoose.Schema({
     org: {type: mongoose.Schema.Types.ObjectId, ref: 'organizations'},
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'TempUser' // or 'TempUser' depending on your user schema
+        ref: 'TempUser' 
     },
     week: {
         monday: dayScheduleSchema,

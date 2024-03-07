@@ -17,14 +17,11 @@ const EmployeesBox = () => {
     if (!newEmployeeName.trim()) return;
 
     try {
-      // Replace with your actual backend endpoint
       const response = await axios.post(`${API_URL}/orgs/addTempUser`, { name: newEmployeeName });
       console.log('Employee added:', response.data);
-      // Assuming the response includes the newly added employee
       setEmployees([...employees, newEmployeeName]);
     } catch (error) {
       console.error('Failed to add employee:', error);
-      // Handle error here, such as showing an error message to the user
     }
 
     setNewEmployeeName('');

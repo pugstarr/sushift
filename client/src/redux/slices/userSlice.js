@@ -6,7 +6,7 @@ export const userSlice = createSlice({
     isAuthenticated: false,
     id: null,
     username: null,
-    email: null, // Add email to your state if needed
+    email: null, 
     Fname: null,
     Lname: null,
     role: null,
@@ -21,7 +21,7 @@ export const userSlice = createSlice({
       state.Fname = Fname;
       state.Lname = Lname;
       state.role = role;
-      // Set other user data from action.payload
+     
     },
     logout: (state) => {
       state.isAuthenticated = false;
@@ -31,12 +31,11 @@ export const userSlice = createSlice({
       state.Fname = null;
       state.Lname = null;
       state.role = null;
-      // Reset other user data fields here
+     
     },
     setCurrentOrganization: (state, action) => {
       state.currentOrganization = action.payload;
     },
-    // Additional reducers can be added here
   },
 });
 
