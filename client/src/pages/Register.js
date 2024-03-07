@@ -8,11 +8,14 @@ function Register() {
     const [password, setPassword] = useState('');
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
+    const API_URL = process.env.NODE_ENV === 'development'
+        ? 'http://localhost:8000'
+        : 'https://sushift-server-lime.vercel.app';
 
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8000/users/register', {
+            const response = await axios.post(`${API_URL}/users/register`, {
                 email,
                 password,
                 Fname: firstName, 

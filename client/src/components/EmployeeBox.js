@@ -8,13 +8,16 @@ const EmployeesBox = () => {
   const [employees, setEmployees] = useState([]);
   const [newEmployeeName, setNewEmployeeName] = useState('');
   const [showInputForm, setShowInputForm] = useState(false);
+  const API_URL = process.env.NODE_ENV === 'development'
+    ? 'http://localhost:8000'
+    : 'https://sushift-server-lime.vercel.app';
 
   const handleAddEmployee = async (e) => {
     e.preventDefault();
     if (!newEmployeeName.trim()) return;
 
     try {
-      const response = await axios.post('http://localhost:8000/orgs/addTempUser', { name: newEmployeeName });
+      const response = await axios.post(`${API_URL}/orgs/addTempUser`, { name: newEmployeeName });
       console.log('Employee added:', response.data);
       setEmployees([...employees, newEmployeeName]);
     } catch (error) {

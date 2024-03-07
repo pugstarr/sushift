@@ -11,19 +11,23 @@ const Home = () => {
     const [organizations, setOrganizations] = useState([]);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selectedOrganization, setSelectedOrganization] = useState(null);
-    const isAuthenticated = useSelector(state => state.user.isAuthenticated); 
+    const isAuthenticated = useSelector(state => state.user.isAuthenticated);
     const userId = useSelector(state => state.user.id);
     const navigate = useNavigate();
 
+    const API_URL = process.env.NODE_ENV === 'development'
+        ? 'http://localhost:8000'
+        : 'https://sushift-server-lime.vercel.app';
+
     useEffect(() => {
         if (!isAuthenticated) {
-            navigate('/login'); 
+            navigate('/login');
         }
     }, [isAuthenticated, navigate]);
 
     const fetchOrganizations = async () => {
         try {
-            const response = await axios.get(`https://localhost:8000/orgs/get?userId=${userId}`);
+            const response = await axios.get(`${API_URL}/orgs/get?userId=${userId}`);
             setOrganizations(response.data);
         } catch (error) {
             console.error('Failed to fetch organizations:', error);
@@ -32,7 +36,7 @@ const Home = () => {
 
     useEffect(() => {
         fetchOrganizations();
-    }, [userId]); // Removed the duplicated function definition
+    }, [userId]); 
 
     const handleAddOrJoinOrganization = () => setDialogOpen(true);
     const handleCloseDialog = () => {
