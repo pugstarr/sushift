@@ -8,6 +8,9 @@ const EmployeesBox = () => {
   const [employees, setEmployees] = useState([]);
   const [newEmployeeName, setNewEmployeeName] = useState('');
   const [showInputForm, setShowInputForm] = useState(false);
+  const API_URL = process.env.NODE_ENV === 'development'
+    ? 'http://localhost:8000'
+    : 'https://sushift-server-lime.vercel.app';
 
   const handleAddEmployee = async (e) => {
     e.preventDefault();
@@ -15,7 +18,7 @@ const EmployeesBox = () => {
 
     try {
       // Replace with your actual backend endpoint
-      const response = await axios.post('http://localhost:8000/orgs/addTempUser', { name: newEmployeeName });
+      const response = await axios.post(`${API_URL}/orgs/addTempUser`, { name: newEmployeeName });
       console.log('Employee added:', response.data);
       // Assuming the response includes the newly added employee
       setEmployees([...employees, newEmployeeName]);
