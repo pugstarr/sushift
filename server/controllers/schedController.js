@@ -1,4 +1,4 @@
-const Sched = require('../models/Sched'); // Assuming you have a Mongoose model for Schedules
+const Sched = require('../models/Schedule'); // Assuming you have a Mongoose model for Schedules
 
 // Get all schedules
 exports.getAllScheds = async (req, res) => {
