@@ -6,19 +6,40 @@ import { setCurrentOrganization } from '../redux/slices/userSlice';
 const OrganizationDropdown = ({ organizations, onOrganizationSelected, onAddOrJoinOrganization }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [buttonWidth, setButtonWidth] = useState(0);
+    const [alignLeft, setAlignLeft] = useState(false); // State to determine if dropdown should align to the left
     const buttonRef = useRef(null);
 
     const currentOrganization = useSelector((state) => state.user.currentOrganization);
 
     useEffect(() => {
-        if (buttonRef.current) {
-            setButtonWidth(buttonRef.current.offsetWidth);
+        function updateButtonWidthAndAlignment() {
+            if (buttonRef.current) {
+                const rect = buttonRef.current.getBoundingClientRect();
+                setButtonWidth(buttonRef.current.offsetWidth);
+                
+                const spaceRight = window.innerWidth - rect.right;
+                const dropdownWidth = Math.max(buttonRef.current.offsetWidth, 200);
+
+                // Align left if there is not enough space to the right
+                if (spaceRight < dropdownWidth) {
+                    setAlignLeft(true);
+                } else {
+                    setAlignLeft(false);
+                }
+            }
         }
-    }, [buttonRef.current]);
+
+        updateButtonWidthAndAlignment();
+        
+        // Add event listener to handle window resize
+        window.addEventListener('resize', updateButtonWidthAndAlignment);
+
+        // Cleanup listener on component unmount
+        return () => window.removeEventListener('resize', updateButtonWidthAndAlignment);
+    }, [isOpen]);
 
     const toggleDropdown = () => setIsOpen(!isOpen);
 
-  
     const placeholderText = currentOrganization ? currentOrganization.name : "Select Organization";
 
     const dispatch = useDispatch();
@@ -26,17 +47,17 @@ const OrganizationDropdown = ({ organizations, onOrganizationSelected, onAddOrJo
     const handleOrganizationSelected = (org) => {
         onOrganizationSelected(org);
         dispatch(setCurrentOrganization(org));
-        setIsOpen(false); 
+        setIsOpen(false);
     };
 
     return (
         <div style={{ zIndex: 20 }} className="relative inline-block text-white" ref={buttonRef}>
             <div onClick={toggleDropdown} className="cursor-pointer bg-transparent py-2 flex items-center justify-between">
                 <h1 className="text-4xl font-bold">{placeholderText}</h1>
-                <CaretUp size={20} weight="bold" className="text-gray-400 rotate-180" />
+                <CaretUp size={20} weight="bold" className={`text-gray-400 ${isOpen ? '' : 'rotate-180'}`}/>
             </div>
             {isOpen && (
-                <div className="absolute right-0 mt-2" style={{ width: `${buttonWidth}px` }}>
+                <div className={`absolute ${alignLeft ? 'left-0' : 'right-0'} mt-2`} style={{ width: `${Math.max(buttonWidth, 200)}px` }}>
                     <div className="bg-gray-800 rounded-lg shadow-xl">
                         {organizations.length > 0 ? (
                             organizations.map((org) => (
