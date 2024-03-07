@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { List, X, UserCircle, Gear, SignOut } from 'phosphor-react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../redux/slices/userSlice'; // Adjust the import path as necessary
 
 const SidebarItem = ({ icon, label, onClick }) => (
   <div 
@@ -15,10 +16,17 @@ const SidebarItem = ({ icon, label, onClick }) => (
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   
   const toggleSidebar = () => setIsOpen(!isOpen);
 
   const fName = useSelector(state => state.user.Fname);
+
+  const handleSignOut = () => {
+    dispatch(logout()); // Dispatch logout action to clear the user state
+    navigate('/login'); // Redirect to the login page
+  };
+
   return (
     <div className="flex h-screen">
       {/* Mobile view menu icon */}
@@ -43,7 +51,7 @@ const Sidebar = () => {
 
         {/* Sign Out button */}
         <div>
-          <SidebarItem icon={<SignOut size={20} className="h-5 w-5" />} label="Sign Out" onClick={() => console.log('Signing out')} />
+          <SidebarItem icon={<SignOut size={20} className="h-5 w-5" />} label="Sign Out" onClick={handleSignOut} />
         </div>
       </div>
     </div>
