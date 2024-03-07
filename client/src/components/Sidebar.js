@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { List, X, UserCircle, Gear, SignOut } from 'phosphor-react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../redux/slices/userSlice'; 
 
 const SidebarItem = ({ icon, label, onClick }) => (
@@ -21,6 +21,7 @@ const Sidebar = () => {
   const toggleSidebar = () => setIsOpen(!isOpen);
 
   const fName = useSelector(state => state.user.Fname);
+  const lName = useSelector(state => state.user.Lname);
 
   const handleSignOut = () => {
     dispatch(logout()); 
@@ -37,10 +38,9 @@ const Sidebar = () => {
       {/* Sidebar */}
       <div 
         className={`bg-gradient-to-b from-gray-800 to-black text-white w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 transition duration-200 ease-in-out flex flex-col`}>
-        {/* Logo or branding area */}
+        {/* Name */}
         <div className="px-4 mb-10">
-          <UserCircle size={48} className="h-12 w-12 mx-auto" />
-          <h2 className="text-center text-xl font-semibold mt-2">{fName}</h2>
+          <h2 className="text-center text-xl font-semibold mt-2">{fName} {lName}</h2>
         </div>
 
         {/* Navigation items */}

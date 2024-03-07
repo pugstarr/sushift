@@ -7,6 +7,8 @@ import Schedule from '../components/Schedule';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../assets/sushift-logo.png';
+// Import icons
+import { FiMenu, FiArrowLeft } from 'react-icons/fi';
 
 const Home = () => {
     const [organizations, setOrganizations] = useState([]);
@@ -60,7 +62,7 @@ const Home = () => {
             <div className="flex flex-col w-full">
                 <div className="flex justify-between items-center p-4">
                     <button onClick={toggleSidebar} className="text-white focus:outline-none">
-                        {isSidebarOpen ? 'Close Sidebar' : 'Open Sidebar'}
+                        {isSidebarOpen ? <FiArrowLeft size="1.5em" /> : <FiMenu size="1.5em" />}
                     </button>
                     <img src={Logo} alt="Sushift Logo" className="w-48 h-auto cursor-pointer" onClick={() => navigate('/home')} />
                 </div>
