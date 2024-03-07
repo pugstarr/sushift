@@ -27,21 +27,25 @@ const loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
     let user = await User.findOne({ email });
+    // Check if user exists
+    if (!user) {
+        return res.status(400).json({ msg: 'User not found' });
+    }
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
         return res.status(400).json({ msg: 'Invalid Credentials' });
     }
 
-    // Assuming you want to return the user ID and possibly other information
+    // User is found and password matches
     res.json({
       msg: 'User logged in successfully',
       user: {
-        id: user._id, // Include the user's ID
+        id: user._id,
         email: user.email,
         Fname: user.Fname,
         Lname: user.Lname,
         role: user.role
-        // Add any other user info you want to return here
       }
     });
   } catch (err) {
@@ -49,7 +53,6 @@ const loginUser = async (req, res) => {
     res.status(500).json({ msg: 'Server error' });
   }
 };
-
 
 
 module.exports = { registerUser, loginUser };
