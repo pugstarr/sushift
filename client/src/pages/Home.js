@@ -62,7 +62,7 @@ const Home = () => {
                     <button onClick={toggleSidebar} className="text-white focus:outline-none">
                         {isSidebarOpen ? 'Close Sidebar' : 'Open Sidebar'}
                     </button>
-                    <img src={Logo} alt="Sushift Logo" className="w-40 h-auto cursor-pointer" onClick={() => navigate('/home')} />
+                    <img src={Logo} alt="Sushift Logo" className="w-48 h-auto cursor-pointer" onClick={() => navigate('/home')} />
                 </div>
                 <div className="px-4">
                     <OrganizationDropdown
