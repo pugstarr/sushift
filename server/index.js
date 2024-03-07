@@ -30,6 +30,8 @@ const userRoutes = require('./routes/users');
 app.use('/users', userRoutes);
 const organizationRoutes = require('./routes/orgs');
 app.use('/orgs', organizationRoutes);
+const schedRoutes = require('./routes/scheds');
+app.use('/schedules',schedRoutes);
 
 // Start server
 app.listen(PORT, () => {
