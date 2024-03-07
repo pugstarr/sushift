@@ -49,7 +49,7 @@ const Home = () => {
     };
 
     return (
-        <div className="flex flex-wrap min-h-screen bg-gradient-to-br from-gray-900 to-green-800 text-white">
+        <div className="flex flex-wrap min-h-screen bg-gradient-to-br from-gray-900 to-red-900 text-white">
             <div className="w-full sm:w-1/4 xl:w-1/5 min-h-screen">
                 <Sidebar />
             </div>
