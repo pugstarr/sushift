@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { login } from '../redux/slices/userSlice'; // Adjust this import path to where your userSlice is located
+import { login } from '../redux/slices/userSlice'; 
 
 function Login() {
     const navigate = useNavigate();

@@ -21,12 +21,9 @@ const createOrganization = async (req, res) => {
       }
     }
 
-    // Add the user's ID to the organization's users array when creating the organization
-    organization = new Organization({ name, joinCode, users: [userId] }); // Add the user ID here
+    organization = new Organization({ name, joinCode, users: [userId] }); 
     await organization.save();
 
-    // Optionally, you may want to ensure the user exists and update the user's information as needed
-    // This can be done similarly to how you add users to an organization in addUserToOrganization
 
     res.status(201).json({ msg: 'Organization created successfully', organization });
   } catch (err) {
@@ -71,7 +68,7 @@ const addTempUserToOrganization = async (req, res) => {
       return res.status(404).json({ msg: 'Organization not found' });
     }
 
-    organization.tempUsers.push(tempUser._id); // Assuming your Organization model has a tempUsers field
+    organization.tempUsers.push(tempUser._id); 
     await organization.save();
 
     res.status(201).json({ msg: 'Temp user added successfully', tempUser });
@@ -81,7 +78,7 @@ const addTempUserToOrganization = async (req, res) => {
 };
 
 const getTempUsersOfOrganization = async (req, res) => {
-  const { orgId } = req.params; // Extracting orgId from URL parameters
+  const { orgId } = req.params; 
 
   try {
     const organization = await Organization.findById(orgId).populate('tempUsers');
@@ -89,10 +86,8 @@ const getTempUsersOfOrganization = async (req, res) => {
       return res.status(404).json({ msg: 'Organization not found' });
     }
 
-    // Ensure that tempUsers is always an array
     const tempUsers = organization.tempUsers || [];
 
-    // Send back the temp users of the organization
     res.json({ tempUsers });
   } catch (err) {
     res.status(500).json({ msg: 'Server error', error: err.message });
@@ -136,7 +131,7 @@ const deleteOrganization = async (req, res) => {
 };
 
 const getOrganizations = async (req, res) => {
-  const userId = req.query.userId; // Assuming you're passing the userId as a query parameter
+  const userId = req.query.userId;
 
   try {
     // Find organizations where the users array contains the userId

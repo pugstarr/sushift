@@ -5,20 +5,19 @@ import OrganizationDropdown from '../components/OrganizationDropdown';
 import NewOrganizationDialog from '../dialogs/NewOrganizationDialog';
 import Schedule from '../components/Schedule';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
     const [organizations, setOrganizations] = useState([]);
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selectedOrganization, setSelectedOrganization] = useState(null);
-    const isAuthenticated = useSelector(state => state.user.isAuthenticated); // Use isAuthenticated from the Redux store
+    const isAuthenticated = useSelector(state => state.user.isAuthenticated); 
     const userId = useSelector(state => state.user.id);
-    const navigate = useNavigate(); // Initialize useNavigate hook
+    const navigate = useNavigate();
 
     useEffect(() => {
-        // Redirect the user to the login page if not authenticated
         if (!isAuthenticated) {
-            navigate('/login'); // Change '/login' to your login route path
+            navigate('/login'); 
         }
     }, [isAuthenticated, navigate]);
 

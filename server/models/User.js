@@ -1,5 +1,3 @@
-// may not be needed for google oauth
-
 const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema({

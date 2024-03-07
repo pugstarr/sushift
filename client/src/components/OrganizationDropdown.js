@@ -8,7 +8,6 @@ const OrganizationDropdown = ({ organizations, onOrganizationSelected, onAddOrJo
     const [buttonWidth, setButtonWidth] = useState(0);
     const buttonRef = useRef(null);
 
-    // Accessing current organization from Redux state
     const currentOrganization = useSelector((state) => state.user.currentOrganization);
 
     useEffect(() => {
@@ -19,7 +18,7 @@ const OrganizationDropdown = ({ organizations, onOrganizationSelected, onAddOrJo
 
     const toggleDropdown = () => setIsOpen(!isOpen);
 
-    // Update placeholderText based on current organization or lack thereof
+  
     const placeholderText = currentOrganization ? currentOrganization.name : "Select Organization";
 
     const dispatch = useDispatch();
@@ -27,7 +26,7 @@ const OrganizationDropdown = ({ organizations, onOrganizationSelected, onAddOrJo
     const handleOrganizationSelected = (org) => {
         onOrganizationSelected(org);
         dispatch(setCurrentOrganization(org));
-        setIsOpen(false); // Close the dropdown after selection
+        setIsOpen(false); 
     };
 
     return (

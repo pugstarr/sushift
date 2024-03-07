@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { List, X, UserCircle, Gear, SignOut } from 'phosphor-react';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../redux/slices/userSlice'; // Adjust the import path as necessary
+import { logout } from '../redux/slices/userSlice'; 
 
 const SidebarItem = ({ icon, label, onClick }) => (
   <div 
@@ -23,8 +23,8 @@ const Sidebar = () => {
   const fName = useSelector(state => state.user.Fname);
 
   const handleSignOut = () => {
-    dispatch(logout()); // Dispatch logout action to clear the user state
-    navigate('/login'); // Redirect to the login page
+    dispatch(logout()); 
+    navigate('/login'); 
   };
 
   return (

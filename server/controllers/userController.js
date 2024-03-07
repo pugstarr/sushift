@@ -32,7 +32,6 @@ const loginUser = async (req, res) => {
         return res.status(400).json({ msg: 'Invalid Credentials' });
     }
 
-    // Assuming you want to return the user ID and possibly other information
     res.json({
       msg: 'User logged in successfully',
       user: {
@@ -41,7 +40,6 @@ const loginUser = async (req, res) => {
         Fname: user.Fname,
         Lname: user.Lname,
         role: user.role
-        // Add any other user info you want to return here
       }
     });
   } catch (err) {
