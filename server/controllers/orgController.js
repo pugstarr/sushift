@@ -39,7 +39,7 @@ const addUserToOrganization = async (req, res) => {
     const user = await User.findById(userId);
 
     if (!organization ) {
-      return res.status(404).json({ msg: 'Organization not found' });
+      return res.status(404).json({ msg: 'Organization not found: ', details: { joinCode, userId } });
     }
     if (!user ) {
       return res.status(404).json({ msg: 'User not found' });
@@ -121,7 +121,7 @@ const deleteOrganization = async (req, res) => {
     const organization = await Organization.findByIdAndDelete(orgId);
 
     if (!organization) {
-      return res.status(404).json({ msg: 'Organization not found' });
+      return res.status(404).json({ msg: 'Organization not found'});
     }
 
     res.json({ msg: 'Organization deleted successfully' });

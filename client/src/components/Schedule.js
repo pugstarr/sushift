@@ -4,11 +4,24 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faClock, faPlus, faArrowLeft, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { format, getWeek } from 'date-fns';
 
 const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const shiftTypes = ['None', 'Morning', 'Night', 'Full'];
 
 const Schedule = () => {
+    //date stuff for title
+    const getWeekInfo = () => {
+        const currentDate = new Date();
+        const first = currentDate.getDate() - currentDate.getDay() + 1;
+        const last = first + 6;
+        const monday = new Date(currentDate.setDate(first));
+        const sunday = new Date(currentDate.setDate(last));
+
+        return {weekStart : format(monday, ("MMMM dd")), weekEnd : format(sunday, "MMMM dd")}
+    }
+    
+    const {weekStart, weekEnd} = getWeekInfo();
     const [employees, setEmployees] = useState([]);
     const [newEmployeeName, setNewEmployeeName] = useState('');
     const [showInputForm, setShowInputForm] = useState(false);
@@ -87,6 +100,9 @@ const Schedule = () => {
 
     return (
         <div className="overflow-visible relative">
+            <div className='text-lg font-semibold mb-4'>
+            Schedule week: {weekStart} - {weekEnd}
+            </div>
             <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                     <tr>

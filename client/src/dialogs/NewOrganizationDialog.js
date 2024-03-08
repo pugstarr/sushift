@@ -26,10 +26,12 @@ const NewOrganizationDialog = ({ onClose, onCreate }) => {
   const handleJoin = async(event) => {
     event.preventDefault();
     try{
-      const response = await axios.post(`${API_URL}/orgs/addUser`, {userId: userId, orgId : link});
+      const response = await axios.post(`http://localhost:8000/orgs/addUser`, {userId: userId, joinCode : link});
       onClose();
-    } catch(error){
-      console.error('aye', error);
+    }
+    catch(error) {
+        console.error('Error response:', error.response);
+        console.error('Error details:', error);
     }
     onClose();
   };
