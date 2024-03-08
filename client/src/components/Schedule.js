@@ -95,6 +95,24 @@ const Schedule = () => {
         });
         return totals;
     };
+
+    const handleSaveSchedule = async () => {
+        const scheduleData = {
+            orgId: orgId,
+            weekStart: weekStart,
+            schedules: employees.map(emp => ({
+                name: emp.name,
+                schedule: emp.schedule,
+            })),
+        };
+    
+        try {
+            const response = await axios.post(`${API_URL}/schedules`, scheduleData);
+            console.log('Schedule saved successfully:', response.data);
+        } catch (error) {
+            console.error('Failed to save schedule:', error);
+        }
+    };
     
     const shiftTotals = calculateShiftTotals();
 
@@ -222,6 +240,9 @@ const Schedule = () => {
         </button>
     </div>
 )}
+        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleSaveSchedule}>
+                Save Schedule
+            </button>
         </div>
     );
 };

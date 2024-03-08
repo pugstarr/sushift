@@ -8,6 +8,7 @@ const dayScheduleSchema = new mongoose.Schema({
 
 const userScheduleSchema = new mongoose.Schema({
     org: {type: mongoose.Schema.Types.ObjectId, ref: 'organizations'},
+    weekStart: { type: Date, required: true },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'TempUser' 
@@ -20,8 +21,7 @@ const userScheduleSchema = new mongoose.Schema({
         friday: dayScheduleSchema,
         saturday: dayScheduleSchema,
         sunday: dayScheduleSchema
-    },
-    weekOf : Date
+    }
 });
 
 const UserSchedule = mongoose.model('UserSchedule', userScheduleSchema);
