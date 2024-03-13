@@ -1,7 +1,8 @@
 const Sched = require('../models/Schedule'); 
+const Organization = require('../models/Organization');
 
 // Get all schedules
-exports.getAllScheds = async (req, res) => {
+const getAllScheds = async (req, res) => {
     try {
         const scheds = await Sched.find();
         res.json(scheds);
@@ -10,39 +11,84 @@ exports.getAllScheds = async (req, res) => {
     }
 };
 
-// Create a new schedule
-exports.createSched = async (req, res) => {
-    try {
-        const newSched = new Sched(req.body);
-        const savedSched = await newSched.save();
-        res.status(201).json(savedSched);
-    } catch (error) {
-        res.status(400).send(error);
+const getScheduleByWeekOf = async (req, res) => {
+  const { orgId, weekOf } = req.params;
+  try {
+    const organization = await Organization.findById(orgId).populate({
+      path: 'schedules',
+      match: { weekOf: new Date(weekOf) },
+      populate: {
+        path: 'monday.morning monday.night monday.fullDay tuesday.morning tuesday.night tuesday.fullDay wednesday.morning wednesday.night wednesday.fullDay thursday.morning thursday.night thursday.fullDay friday.morning friday.night friday.fullDay saturday.morning saturday.night saturday.fullDay sunday.morning sunday.night sunday.fullDay',
+        model: 'TempUser'
+      }
+    });
+
+    if (!organization) {
+      return res.status(404).json({ msg: 'Organization not found' });
     }
+
+    let schedule = organization.schedules[0];
+
+    if (!schedule) {
+      // If no schedule exists for the current week, create a new one
+      schedule = new Sched({ org: orgId, weekOf: new Date(weekOf) });
+      await schedule.save();
+
+      organization.schedules.push(schedule._id);
+      await organization.save();
+    }
+
+    res.json({ schedule });
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
 };
 
-// Get a single schedule by id
-exports.getSchedById = async (req, res) => {
-    try {
-        const sched = await Sched.findById(req.params.id);
-        res.json(sched);
-    } catch (error) {
-        res.status(404).send(error);
+const createSchedule = async (req, res) => {
+  const { orgId, weekOf } = req.body;
+
+  try {
+    const organization = await Organization.findById(orgId);
+    if (!organization) {
+      return res.status(404).json({ msg: 'Organization not found' });
     }
+
+    const existingSchedule = await Sched.findOne({ org: orgId, weekOf: new Date(weekOf) });
+    if (existingSchedule) {
+      return res.status(400).json({ msg: 'Schedule already exists for the given week' });
+    }
+
+    const schedule = new Sched({ org: orgId, weekOf: new Date(weekOf) });
+    await schedule.save();
+
+    organization.schedules.push(schedule._id);
+    await organization.save();
+
+    res.status(201).json({ msg: 'Schedule created successfully', schedule });
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
+};
+  
+const updateSchedule = async (req, res) => {
+  const { scheduleId } = req.params;
+  const updateData = req.body;
+
+  try {
+    const schedule = await Sched.findByIdAndUpdate(scheduleId, updateData, { new: true });
+    if (!schedule) {
+      return res.status(404).json({ msg: 'Schedule not found' });
+    }
+
+    res.json({ msg: 'Schedule updated successfully', schedule });
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error', error: err.message });
+  }
 };
 
-// Update a schedule by id
-exports.updateSchedById = async (req, res) => {
-    try {
-        const updatedSched = await Sched.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        res.json(updatedSched);
-    } catch (error) {
-        res.status(400).send(error);
-    }
-};
 
 // Delete a schedule by id
-exports.deleteSchedById = async (req, res) => {
+const deleteSchedById = async (req, res) => {
     try {
         await Sched.findByIdAndDelete(req.params.id);
         res.status(204).send();
@@ -50,3 +96,5 @@ exports.deleteSchedById = async (req, res) => {
         res.status(404).send(error);
     }
 };
+
+module.exports = { getAllScheds, getScheduleByWeekOf, createSchedule, updateSchedule, deleteSchedById };

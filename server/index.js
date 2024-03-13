@@ -33,6 +33,7 @@ app.use('/orgs', organizationRoutes);
 const schedRoutes = require('./routes/scheds');
 app.use('/schedules',schedRoutes);
 
+
 // Start server
 app.listen(PORT, () => {
     console.log(`HTTP Server running on port ${PORT}`);

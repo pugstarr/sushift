@@ -1,29 +1,21 @@
 const mongoose = require('mongoose');
 
 const dayScheduleSchema = new mongoose.Schema({
-    morning: [String], 
-    night: [String],
-    fullDay: [String]
+  morning: [{ type: mongoose.Schema.Types.ObjectId, ref: 'TempUser' }],
+  night: [{ type: mongoose.Schema.Types.ObjectId, ref: 'TempUser' }],
+  fullDay: [{ type: mongoose.Schema.Types.ObjectId, ref: 'TempUser' }]
 });
 
-const userScheduleSchema = new mongoose.Schema({
-    org: {type: mongoose.Schema.Types.ObjectId, ref: 'organizations'},
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'TempUser' 
-    },
-    week: {
-        monday: dayScheduleSchema,
-        tuesday: dayScheduleSchema,
-        wednesday: dayScheduleSchema,
-        thursday: dayScheduleSchema,
-        friday: dayScheduleSchema,
-        saturday: dayScheduleSchema,
-        sunday: dayScheduleSchema
-    },
-    weekOf : Date
+const scheduleSchema = new mongoose.Schema({
+  org: { type: mongoose.Schema.Types.ObjectId, ref: 'Organizations', required: true },
+  weekOf: { type: Date, required: true },
+  monday: dayScheduleSchema,
+  tuesday: dayScheduleSchema,
+  wednesday: dayScheduleSchema,
+  thursday: dayScheduleSchema,
+  friday: dayScheduleSchema,
+  saturday: dayScheduleSchema,
+  sunday: dayScheduleSchema
 });
 
-const UserSchedule = mongoose.model('UserSchedule', userScheduleSchema);
-
-module.exports = UserSchedule;
+module.exports = mongoose.model('Schedule', scheduleSchema);
