@@ -6,7 +6,9 @@ import NewOrganizationDialog from '../dialogs/NewOrganizationDialog';
 import Schedule from '../components/Schedule';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import Logo from '../assets/sushift-logo.png'; // Ensure this path is correct
+import Logo from '../assets/sushift-logo.png';
+// Import icons
+import { FiMenu, FiArrowLeft } from 'react-icons/fi';
 
 const Home = () => {
     const [organizations, setOrganizations] = useState([]);
@@ -15,6 +17,7 @@ const Home = () => {
     const isAuthenticated = useSelector(state => state.user.isAuthenticated);
     const userId = useSelector(state => state.user.id);
     const navigate = useNavigate();
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const API_URL = process.env.NODE_ENV === 'development'
         ? 'http://localhost:8000'
@@ -49,12 +52,21 @@ const Home = () => {
         setSelectedOrganization(organization);
     };
 
+    const toggleSidebar = () => {
+        setIsSidebarOpen(prevState => !prevState);
+    };
+
     return (
-        <div className="flex flex-wrap min-h-screen bg-gradient-to-br from-gray-900 to-red-900 text-white relative">
-            <Sidebar />
-            <img src={Logo} alt="Sushift Logo" className="absolute top-4 right-4 w-56 h-auto z-10" onClick={() => navigate('/home')} />
-            <div className="w-full sm:w-3/4 xl:w-4/5">
-                <div className="pt-8 px-6">
+        <div className="flex min-h-screen bg-gradient-to-br from-gray-900 to-red-900 text-white">
+            {isSidebarOpen && <Sidebar />}
+            <div className="flex flex-col w-full">
+                <div className="flex justify-between items-center p-4">
+                    <button onClick={toggleSidebar} className="text-white focus:outline-none">
+                        {isSidebarOpen ? <FiArrowLeft size="1.5em" /> : <FiMenu size="1.5em" />}
+                    </button>
+                    <img src={Logo} alt="Sushift Logo" className="w-48 h-auto cursor-pointer" onClick={() => navigate('/home')} />
+                </div>
+                <div className="px-4">
                     <OrganizationDropdown
                         organizations={organizations}
                         onOrganizationSelected={handleOrganizationSelected}
@@ -62,7 +74,7 @@ const Home = () => {
                     />
                     {dialogOpen && <NewOrganizationDialog onClose={handleCloseDialog} />}
                 </div>
-                <div className="pt-16 px-4">
+                <div className="flex-grow px-4">
                     <Schedule />
                 </div>
             </div>
