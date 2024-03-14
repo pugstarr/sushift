@@ -5,9 +5,7 @@ import { setCurrentOrganization } from '../redux/slices/userSlice';
 
 const OrganizationDropdown = ({ organizations, onOrganizationSelected, onAddOrJoinOrganization }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [dropdownWidth, setDropdownWidth] = useState('auto');
   const dropdownRef = useRef(null);
-  const addButtonRef = useRef(null);
   const currentOrganization = useSelector((state) => state.user.currentOrganization);
 
   useEffect(() => {
@@ -20,13 +18,6 @@ const OrganizationDropdown = ({ organizations, onOrganizationSelected, onAddOrJo
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
-
-  useEffect(() => {
-    if (addButtonRef.current) {
-      const buttonWidth = addButtonRef.current.offsetWidth;
-      setDropdownWidth(`${buttonWidth}px`);
-    }
   }, []);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
@@ -46,7 +37,7 @@ const OrganizationDropdown = ({ organizations, onOrganizationSelected, onAddOrJo
         <CaretUp size={20} weight="bold" className={`text-gray-400 ${isOpen ? '' : 'rotate-180'}`}/>
       </div>
       {isOpen && (
-        <div className="absolute left-0 mt-2 bg-gray-800 rounded-lg shadow-xl z-10" style={{ width: dropdownWidth }}>
+        <div className="absolute left-0 mt-2 bg-gray-800 rounded-lg shadow-xl z-10" style={{ width: '250px' }}>
           {organizations.length > 0 ? (
             organizations.map((org) => (
               <a
@@ -61,10 +52,7 @@ const OrganizationDropdown = ({ organizations, onOrganizationSelected, onAddOrJo
           ) : (
             <div className="px-4 py-2 text-sm text-gray-400">No organizations found</div>
           )}
-          <div
-            ref={addButtonRef}
-            className="flex items-center justify-start mt-2 px-4 py-2 hover:border-green-700 border-2 border-transparent transition-all duration-200"
-          >
+          <div className="flex items-center justify-start mt-2 px-4 py-2 hover:border-green-700 border-2 border-transparent transition-all duration-200">
             <Plus size={20} className="text-green-500 mr-2" />
             <a href="#!" className="font-bold" onClick={onAddOrJoinOrganization}>
               Add New Organization
