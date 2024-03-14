@@ -76,21 +76,22 @@ const Schedule = () => {
     const handleShiftChange = async (employeeId, day, shiftType) => {
         console.log(`Changing shift for employee ID: ${employeeId}, day: ${day}, to shift type: ${shiftType}`); // Log the shift change attempt
         try {
-            const updatedSchedule = {
-                ...schedule,
-                [day]: {
-                    ...schedule[day],
-                    morning: shiftType === 'Morning'
-                        ? [...(schedule[day]?.morning || []), employeeId]
-                        : (schedule[day]?.morning || []).filter(id => id !== employeeId),
-                    night: shiftType === 'Night'
-                        ? [...(schedule[day]?.night || []), employeeId]
-                        : (schedule[day]?.night || []).filter(id => id !== employeeId),
-                    fullDay: shiftType === 'Full'
-                        ? [...(schedule[day]?.fullDay || []), employeeId]
-                        : (schedule[day]?.fullDay || []).filter(id => id !== employeeId),
-                }
-            };
+            const dayKey = day.charAt(0).toLowerCase() + day.slice(1); // Corrected line
+                const updatedSchedule = {
+                    ...schedule,
+                    [dayKey]: { // Corrected line
+                        ...schedule[dayKey], // Corrected line
+                        morning: shiftType === 'Morning'
+                            ? [...(schedule[dayKey]?.morning || []), employeeId] // Corrected line
+                            : (schedule[dayKey]?.morning || []).filter(id => id !== employeeId), // Corrected line
+                        night: shiftType === 'Night'
+                            ? [...(schedule[dayKey]?.night || []), employeeId] // Corrected line
+                            : (schedule[dayKey]?.night || []).filter(id => id !== employeeId), // Corrected line
+                        fullDay: shiftType === 'Full'
+                            ? [...(schedule[dayKey]?.fullDay || []), employeeId] // Corrected line
+                            : (schedule[dayKey]?.fullDay || []).filter(id => id !== employeeId), // Corrected line
+                    }
+                };
     
             await axios.put(`${API_URL}/schedules/${schedule._id}`, updatedSchedule);
             setSchedule(updatedSchedule);
@@ -103,8 +104,9 @@ const Schedule = () => {
     const calculateShiftTotals = () => {
         const totals = { morning: {}, night: {}, full: {} };
         days.forEach(day => {
-            if (schedule && schedule[day.toLowerCase()]) {
-                const shift = schedule[day.toLowerCase()];
+            const dayKey = day.charAt(0).toLowerCase() + day.slice(1); // Corrected line
+                if (schedule && schedule[dayKey]) { // Corrected line
+                    const shift = schedule[dayKey];
                 if (shift.morning && shift.morning.length > 0) {
                     totals.morning[day] = (totals.morning[day] || 0) + 1;
                 }
@@ -138,38 +140,37 @@ const Schedule = () => {
             />
             <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
-                    <tr>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Employees
-                            <button onClick={toggleInputForm} className="ml-2 bg-green-500 hover:bg-green-700 text-white py-1 px-4 rounded-lg">
-                                <FontAwesomeIcon icon={faPlus} />
-                            </button>
-                            {showInputForm && (
-                                <form onSubmit={handleAddEmployee} className="inline-flex items-center ml-2">
-                                    <input
-                                        type="text"
-                                        value={newEmployeeName}
-                                        onChange={(e) => setNewEmployeeName(e.target.value)}
-                                        placeholder="New Employee"
-                                        className="input-text mr-2"
-                                    />
-                                    <button type="submit" className="btn-create mr-2">
-                                        <FontAwesomeIcon icon={faArrowLeft} />
-                                    </button>
-                                    <button type="button" onClick={handleCancel} className="btn-join">
-                                        <FontAwesomeIcon icon={faTimes} />
-                                    </button>
-                                </form>
-                            )}
-                        </th>
-                        {days.map(day => (
-                            console.log(`Rendering for ${day}:`, schedule[day.toLowerCase()]), // Log the schedule details for the day
-                            <td key={day} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 relative">
-                                {/* Cell rendering logic */}
-                            </td>
-                        ))}
-                    </tr>
-                </thead>
+    <tr>
+        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            Employees
+            <button onClick={toggleInputForm} className="ml-2 bg-green-500 hover:bg-green-700 text-white py-1 px-4 rounded-lg">
+                <FontAwesomeIcon icon={faPlus} />
+            </button>
+            {showInputForm && (
+                <form onSubmit={handleAddEmployee} className="inline-flex items-center ml-2">
+                    <input
+                        type="text"
+                        value={newEmployeeName}
+                        onChange={(e) => setNewEmployeeName(e.target.value)}
+                        placeholder="New Employee"
+                        className="input-text mr-2"
+                    />
+                    <button type="submit" className="btn-create mr-2">
+                        <FontAwesomeIcon icon={faArrowLeft} />
+                    </button>
+                    <button type="button" onClick={handleCancel} className="btn-join">
+                        <FontAwesomeIcon icon={faTimes} />
+                    </button>
+                </form>
+            )}
+        </th>
+        {days.map(day => (
+            <th key={day} scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                {day}
+            </th>
+        ))}
+    </tr>
+</thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                     {employees.length > 0 ? employees.map((employee, index) => (
                         console.log(`Rendering employee ${employee.name}, ID: ${employee._id}`),
