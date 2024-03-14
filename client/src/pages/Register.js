@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useDispatch } from 'react-redux'; // Import useDispatch
+import { login } from '../redux/slices/userSlice'; // Import the login action
 import Logo from '../assets/sushift-logo.png';
- //new stuff please
+
 function Register() {
     const navigate = useNavigate();
+    const dispatch = useDispatch(); // Use useDispatch to dispatch an action
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [firstName, setFirstName] = useState('');
@@ -16,18 +19,35 @@ function Register() {
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`${API_URL}/users/register`, {
+            // Register the user
+            const registerResponse = await axios.post(`${API_URL}/users/register`, {
                 email,
                 password,
                 Fname: firstName, 
                 Lname: lastName,
             });
-            console.log('Registration successful', response.data);
-            navigate('/login');
+
+            if (registerResponse.status === 200 || registerResponse.status === 201) { // Check for successful response
+                // Immediately log in the user after successful registration
+                const loginResponse = await axios.post(`${API_URL}/users/login`, { email, password });
+
+                if (loginResponse.data && loginResponse.data.user) {
+                    const { id, username, email: userEmail, Fname, Lname, role } = loginResponse.data.user;
+                    dispatch(login({ id, username, email: userEmail, Fname, Lname, role }));
+                    navigate('/home');
+                } else {
+                    
+                    navigate('/login');
+                }
+            } else {
+                
+                console.error('Registration was not successful');
+            }
         } catch (error) {
-            console.error('Registration error:', error.response ? error.response.data : error.message);
+            console.error('Registration or login error:', error.response ? error.response.data : error.message);
         }
     };
+    
 
     return (
         <div className="flex flex-wrap min-h-screen w-full relative"> 
