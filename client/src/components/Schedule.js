@@ -27,6 +27,7 @@ const Schedule = () => {
                 try {
                     const response = await axios.get(`${API_URL}/orgs/${orgId}/tempUsers`);
                     setEmployees(response.data.tempUsers);
+                    console.log('Fetched Employees:', response.data.tempUsers); // Log fetched employees
                 } catch (error) {
                     console.error('Failed to load temp users:', error);
                 }
@@ -34,23 +35,23 @@ const Schedule = () => {
         };
         loadTempUsers();
     }, [orgId]);
-
+    
     useEffect(() => {
         const fetchSchedule = async () => {
             if (orgId) {
-              try {
-                const weekOf = format(selectedWeek, 'yyyy-MM-dd');
-                const response = await axios.get(`${API_URL}/schedules/${orgId}/${weekOf}`);
-                setSchedule(response.data.schedule || {});
-              } catch (error) {
-                console.error('Failed to fetch schedule:', error);
-              }
+                try {
+                    const weekOf = format(selectedWeek, 'yyyy-MM-dd');
+                    const response = await axios.get(`${API_URL}/schedules/${orgId}/${weekOf}`);
+                    setSchedule(response.data.schedule || {});
+                    console.log('Fetched Schedule:', response.data.schedule); // Log fetched schedule
+                } catch (error) {
+                    console.error('Failed to fetch schedule:', error);
+                }
             }
-          };
-
+        };
         fetchSchedule();
     }, [orgId, selectedWeek]);
-
+        
     const toggleInputForm = () => setShowInputForm(!showInputForm);
 
     const handleAddEmployee = async (e) => {
@@ -73,6 +74,7 @@ const Schedule = () => {
     };
 
     const handleShiftChange = async (employeeId, day, shiftType) => {
+        console.log(`Changing shift for employee ID: ${employeeId}, day: ${day}, to shift type: ${shiftType}`); // Log the shift change attempt
         try {
             const updatedSchedule = {
                 ...schedule,
@@ -92,6 +94,7 @@ const Schedule = () => {
     
             await axios.put(`${API_URL}/schedules/${schedule._id}`, updatedSchedule);
             setSchedule(updatedSchedule);
+            console.log('Updated Schedule:', updatedSchedule);
         } catch (error) {
             console.error('Failed to update schedule:', error);
         }
@@ -160,14 +163,16 @@ const Schedule = () => {
                             )}
                         </th>
                         {days.map(day => (
-                            <th key={day} scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                {day}
-                            </th>
+                            console.log(`Rendering for ${day}:`, schedule[day.toLowerCase()]), // Log the schedule details for the day
+                            <td key={day} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 relative">
+                                {/* Cell rendering logic */}
+                            </td>
                         ))}
                     </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                     {employees.length > 0 ? employees.map((employee, index) => (
+                        console.log(`Rendering employee ${employee.name}, ID: ${employee._id}`),
                         <tr key={index} className="relative group">
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                 {employee.name}
@@ -177,9 +182,9 @@ const Schedule = () => {
                                 <td key={day} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 relative">
                                     <button onClick={() => setActiveCell({ employeeName: employee.name, day: day })}>
                                         {schedule[day.toLowerCase()] ? (
-                                            schedule[day.toLowerCase()].morning.includes(employee._id) ? 'Morning' :
-                                            schedule[day.toLowerCase()].night.includes(employee._id) ? 'Night' :
-                                            schedule[day.toLowerCase()].fullDay.includes(employee._id) ? 'Full' : 'None'
+                                            schedule[day.toLowerCase()].morning.some(e => e._id === employee._id) ? 'Morning' :
+                                            schedule[day.toLowerCase()].night.some(e => e._id === employee._id) ? 'Night' :
+                                            schedule[day.toLowerCase()].fullDay.some(e => e._id === employee._id) ? 'Full' : 'None'
                                         ) : 'None'}
                                     </button>
                                     {activeCell.employeeName === employee.name && activeCell.day === day && (
